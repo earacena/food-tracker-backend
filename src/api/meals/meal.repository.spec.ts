@@ -1,0 +1,105 @@
+import { NoResultError } from 'kysely'
+import { db } from '../../utils/db'
+import { zMeal, zMeals } from './meal.types'
+import MealRepository from './meal.repository'
+
+describe('Meal Repository', () => {
+  const currentTimestamp = new Date()
+
+  beforeAll(async () => {
+    await db.schema.createTable('meal')
+      .addColumn('id', 'integer', (cb) => cb.autoIncrement().primaryKey()) // Sqlite3 specific
+      .addColumn('name', 'text', (cb) => cb.notNull())
+      .addColumn('userId', 'integer', (cb) => cb.notNull())
+      .addColumn('createdAt', 'timestamp', (cb) =>
+        cb.notNull().defaultTo(currentTimestamp)
+      )
+      .execute()
+
+    // Add test data
+    await db.insertInto('meal')
+      .values({
+        id: 1,
+        userId: 312,
+        name: 'english breakfast'
+      })
+      .executeTakeFirst()
+
+    await db.insertInto('meal')
+      .values({
+        id: 2,
+        userId: 312,
+        name: 'smoothie'
+      })
+      .executeTakeFirst()
+  })
+
+  afterAll(async () => {
+    await db.schema.dropTable('meal').execute()
+  })
+
+  test('should return meal with a given id', async () => {
+    const meal = zMeal.parse(await MealRepository.findMealById(1))
+
+    expect(meal).toStrictEqual({
+      id: 1,
+      userId: 312,
+      name: 'english breakfast',
+      createdAt: currentTimestamp
+    })
+  })
+
+  test('should return all meals belonging to user', async () => {
+    const meals = zMeals.parse(await MealRepository.findMealsByUserId(312))
+
+    expect(meals).toStrictEqual([
+      {
+        id: 1,
+        userId: 312,
+        name: 'english breakfast',
+        createdAt: currentTimestamp
+      },
+      {
+        id: 2,
+        userId: 312,
+        name: 'smoothie',
+        createdAt: currentTimestamp
+      }
+    ])
+  })
+
+  test('should update meal with given id and return it', async () => {
+    const updatedMeal = zMeal.parse(await MealRepository.updateMeal(2, { name: 'apple smoothie' }))
+
+    expect(updatedMeal).toStrictEqual({
+      id: 2,
+      userId: 312,
+      name: 'apple smoothie',
+      createdAt: currentTimestamp
+    })
+  })
+
+  test('should create a meal', async () => {
+    const newMeal = zMeal.parse(await MealRepository.createMeal({
+      name: 'Dinner',
+      userId: 312
+    }))
+
+    expect(newMeal).toStrictEqual({
+      id: 3,
+      userId: 312,
+      name: 'Dinner',
+      createdAt: currentTimestamp
+    })
+  })
+
+  test('should delete meal with given id', async () => {
+    await MealRepository.deleteMeal(1)
+
+    try {
+      await MealRepository.findMealById(1)
+    } catch (err: unknown) {
+      expect(err).toBeInstanceOf(NoResultError)
+    }
+  })
+})
