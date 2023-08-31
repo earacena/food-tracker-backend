@@ -1,11 +1,14 @@
-import { sql } from 'kysely'
+import { NoResultError } from 'kysely'
 import { db } from '../../utils/db'
 import FoodItemRepository from './foodItem.repository'
+import { zFoodItem, zFoodItems } from './foodItem.types'
 
 describe('FoodItem Repository', () => {
+  const currentTimestamp = new Date()
+
   beforeAll(async () => {
     await db.schema.createTable('foodItem')
-      .addColumn('id', 'serial', (cb) => cb.primaryKey())
+      .addColumn('id', 'integer', (cb) => cb.autoIncrement().primaryKey())
       .addColumn('foodName', 'text', (cb) => cb.notNull())
       .addColumn('userId', 'integer', (cb) => cb.notNull())
       .addColumn('caloriesPerServing', 'integer', (cb) => cb.notNull())
@@ -13,14 +16,14 @@ describe('FoodItem Repository', () => {
       .addColumn('servingSizeInUnits', 'integer')
       .addColumn('searchVisibility', 'varchar(10)', (cb) => cb.notNull())
       .addColumn('createdAt', 'timestamp', (cb) =>
-        cb.notNull().defaultTo(sql`CURRENT_TIMESTAMP`) // Sqlite3 specific timestamp
+        cb.notNull().defaultTo(currentTimestamp)
       )
       .execute()
 
     // Add test data
     await db.insertInto('foodItem')
       .values({
-        id: 123,
+        id: 1,
         foodName: 'Apple',
         userId: 321,
         caloriesPerServing: 100,
@@ -31,7 +34,7 @@ describe('FoodItem Repository', () => {
 
     await db.insertInto('foodItem')
       .values({
-        id: 124,
+        id: 2,
         foodName: 'Banana',
         userId: 323,
         caloriesPerServing: 1000,
@@ -39,31 +42,108 @@ describe('FoodItem Repository', () => {
         searchVisibility: 'public'
       })
       .executeTakeFirst()
+
+    await db.insertInto('foodItem')
+      .values({
+        id: 3,
+        foodName: 'Pear',
+        userId: 321,
+        caloriesPerServing: 10,
+        servingSizeInUnits: 1,
+        searchVisibility: 'private'
+      })
+      .executeTakeFirst()
+  })
+
+  afterAll(async () => {
+    await db.schema.dropTable('foodItem').execute()
   })
 
   test('should find foodItem with a given id', async () => {
-    await FoodItemRepository.findFoodItemById(123)
+    const foodItem = zFoodItem.parse(await FoodItemRepository.findFoodItemById(1))
+
+    expect(foodItem).toStrictEqual({
+      id: 1,
+      foodName: 'Apple',
+      userId: 321,
+      caloriesPerServing: 100,
+      servingSizeInGrams: 150,
+      servingSizeInUnits: null,
+      createdAt: currentTimestamp,
+      searchVisibility: 'private'
+    })
   })
 
   test('should find all foodItems belonging to user', async () => {
-    await FoodItemRepository.findFoodItemsByUserId(321)
+    const foodItems = zFoodItems.parse(await FoodItemRepository.findFoodItemsByUserId(321))
+
+    expect(foodItems).toStrictEqual([
+      {
+        id: 1,
+        foodName: 'Apple',
+        userId: 321,
+        caloriesPerServing: 100,
+        servingSizeInGrams: 150,
+        servingSizeInUnits: null,
+        createdAt: currentTimestamp,
+        searchVisibility: 'private'
+      },
+      {
+        id: 3,
+        foodName: 'Pear',
+        userId: 321,
+        caloriesPerServing: 10,
+        servingSizeInUnits: 1,
+        servingSizeInGrams: null,
+        createdAt: currentTimestamp,
+        searchVisibility: 'private'
+      }
+    ])
   })
 
-  test('should update foodItem with given id', async () => {
-    await FoodItemRepository.updateFoodItem(123, { foodName: 'Super Apple' })
+  test('should update foodItem with given id and return it', async () => {
+    const updatedFoodItem = zFoodItem.parse(await FoodItemRepository.updateFoodItem(1, { foodName: 'Super Apple' }))
+
+    expect(updatedFoodItem).toStrictEqual({
+      id: 1,
+      foodName: 'Super Apple',
+      userId: 321,
+      caloriesPerServing: 100,
+      servingSizeInGrams: 150,
+      servingSizeInUnits: null,
+      createdAt: currentTimestamp,
+      searchVisibility: 'private'
+    })
   })
 
-  test('should create a foodItem', async () => {
-    await FoodItemRepository.createFoodItem({
+  test('should create a foodItem and return it', async () => {
+    const newFoodItem = zFoodItem.parse(await FoodItemRepository.createFoodItem({
       foodName: 'New Apple',
       userId: 321,
       caloriesPerServing: 150,
       servingSizeInUnits: 1,
       searchVisibility: 'public'
+    }))
+
+    expect(newFoodItem).toStrictEqual({
+      id: 4,
+      foodName: 'New Apple',
+      userId: 321,
+      caloriesPerServing: 150,
+      servingSizeInUnits: 1,
+      servingSizeInGrams: null,
+      createdAt: currentTimestamp,
+      searchVisibility: 'public'
     })
   })
 
   test('should delete foodItem with given id', async () => {
-    await FoodItemRepository.deleteFoodItem(123)
+    await FoodItemRepository.deleteFoodItem(1)
+
+    try {
+      expect(await FoodItemRepository.findFoodItemById(1)).toThrowError()
+    } catch (err: unknown) {
+      expect(err).toBeInstanceOf(NoResultError)
+    }
   })
 })
