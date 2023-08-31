@@ -97,7 +97,7 @@ describe('FoodItem API', () => {
     })
   })
 
-  describe('POST', () => {
+  describe('when creating foodItems', () => {
     test('should create and return new foodItem', async () => {
       const response = await api
         .post('/api/foodItems/')
@@ -131,7 +131,7 @@ describe('FoodItem API', () => {
     })
   })
 
-  describe('PUT', () => {
+  describe('when updating foodItems', () => {
     test('should update and return updated foodItem', async () => {
       const response = await api
         .put('/api/foodItems/1')
@@ -163,7 +163,7 @@ describe('FoodItem API', () => {
     })
   })
 
-  describe('DELETE', () => {
+  describe('when deleting foodItems', () => {
     test('should delete foodItem', async () => {
       await api
         .delete('/api/foodItems/1')
