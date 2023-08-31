@@ -8,3 +8,12 @@ export const zMeal = z.object({
 })
 
 export const zMeals = z.array(zMeal)
+
+export const zMealDetails = z.object({
+  userId: z.number(),
+  name: z.string()
+})
+
+export const zMealUpdatableFields = z.object({
+  name: z.string()
+})
