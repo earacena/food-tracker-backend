@@ -1,6 +1,7 @@
 import type { NextFunction, Request, Response } from 'express'
 import FoodItemRepository from './foodItem.repository'
-import { zFoodItemDetails, zFoodItemUpdatableFields, zIdParams, zUserIdParams } from './foodItem.types'
+import { zFoodItem, zFoodItemDetails, zFoodItemUpdatableFields } from './foodItem.types'
+import { zIdParams, zUserIdParams } from '../../common.types'
 
 export async function getFoodItemController (req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
@@ -57,11 +58,7 @@ export async function updateFoodItemController (req: Request, res: Response, nex
   try {
     const { id } = zIdParams.parse(req.params)
     const updatedFields = zFoodItemUpdatableFields.parse(req.body)
-    const foodItem = await FoodItemRepository.findFoodItemById(id)
-
-    await FoodItemRepository.updateFoodItem(id, { ...foodItem, ...updatedFields })
-
-    const updatedFoodItem = await FoodItemRepository.findFoodItemById(id)
+    const updatedFoodItem = zFoodItem.parse(await FoodItemRepository.updateFoodItem(id, updatedFields))
 
     res.status(200)
       .json({
