@@ -26,11 +26,12 @@ export async function createFoodItem (foodItem: NewFoodItem): Promise<FoodItem> 
     .executeTakeFirstOrThrow()
 }
 
-export async function updateFoodItem (id: number, updateWith: FoodItemUpdate): Promise<void> {
-  await db.updateTable('foodItem')
+export async function updateFoodItem (id: number, updateWith: FoodItemUpdate): Promise<FoodItem> {
+  return await db.updateTable('foodItem')
     .set(updateWith)
     .where('id', '=', id)
-    .execute()
+    .returningAll()
+    .executeTakeFirstOrThrow()
 }
 
 export async function deleteFoodItem (id: number): Promise<void> {
