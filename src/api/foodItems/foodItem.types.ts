@@ -8,6 +8,19 @@ export const zUserIdParams = z.object({
   userId: z.coerce.number()
 })
 
+export const zFoodItem = z.object({
+  id: z.number(),
+  foodName: z.string(),
+  userId: z.number(),
+  caloriesPerServing: z.number(),
+  servingSizeInGrams: z.number().nullable(),
+  servingSizeInUnits: z.number().nullable(),
+  searchVisibility: z.enum(['private', 'public']),
+  createdAt: z.coerce.date()
+})
+
+export const zFoodItems = z.array(zFoodItem)
+
 export const zFoodItemDetails = z.object({
   foodName: z.string(),
   userId: z.number(),
