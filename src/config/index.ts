@@ -2,6 +2,7 @@ import 'dotenv/config'
 import { z } from 'zod'
 
 export const NODE_ENV = z.string().parse(process.env['NODE_ENV'])
+export const PORT = z.coerce.number().parse(process.env['PORT'])
 
 const zDatabaseCredentials = z.object({
   user: z.string(),
