@@ -1,18 +1,23 @@
-import express, { Request, Response } from 'express';
+import express from 'express'
+import { PORT } from './config'
+import foodItemRouter from './api/foodItems/foodItem.routes'
+import errorHandler from './middleware/errorHandler.middleware'
 
-const expressApp = express();
-const port = 3000;
+const expressApp = express()
 
-expressApp.get("/", (_req: Request, res: Response) => {
-  res.json({
-    data: "Hello World!",
-  });
-});
+// Pre-route middleware
+expressApp.use(express.json())
 
-const main = () => {
-  expressApp.listen(port, () => {
-    console.log(`listening @ ${port}`);
-  });
-};
+// Routes
+expressApp.use('/api/foodItems', foodItemRouter)
 
-export default { main, expressApp };
+// Post-route middleware
+expressApp.use(errorHandler)
+
+function main (): void {
+  expressApp.listen(PORT, () => {
+    console.log(`listening @ ${PORT}`)
+  })
+}
+
+export default { main, expressApp }
