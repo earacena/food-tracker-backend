@@ -4,9 +4,11 @@ import SqliteDatabase from 'better-sqlite3'
 import { NODE_ENV, databaseCredentials } from '../config'
 
 import { type FoodItemTable } from '../api/foodItems/foodItem.model'
+import { type MealTable } from '../api/meals/meal.model'
 
 interface Database {
   foodItem: FoodItemTable
+  meal: MealTable
 }
 
 const mainDialect = new PostgresDialect({
