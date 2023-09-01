@@ -49,6 +49,15 @@ describe('Meal Repository', () => {
     })
   })
 
+  test('should throw an error if foodItem is not found', async () => {
+    try {
+      await MealRepository.findMealById(222)
+      throw new Error() // fails test if expected error is not thrown
+    } catch (err: unknown) {
+      expect(err).toBeInstanceOf(NoResultError)
+    }
+  })
+
   test('should return all meals belonging to user', async () => {
     const meals = zMeals.parse(await MealRepository.findMealsByUserId(312))
 
@@ -98,6 +107,7 @@ describe('Meal Repository', () => {
 
     try {
       await MealRepository.findMealById(1)
+      throw new Error() // fails test if expected error is not thrown
     } catch (err: unknown) {
       expect(err).toBeInstanceOf(NoResultError)
     }
