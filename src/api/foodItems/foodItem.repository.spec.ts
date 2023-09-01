@@ -74,6 +74,15 @@ describe('FoodItem Repository', () => {
     })
   })
 
+  test('should throw an error if foodItem is not found', async () => {
+    try {
+      await FoodItemRepository.findFoodItemById(222)
+      throw new Error() // fails test if expected error is not thrown
+    } catch (err: unknown) {
+      expect(err).toBeInstanceOf(NoResultError)
+    }
+  })
+
   test('should find all foodItems belonging to user', async () => {
     const foodItems = zFoodItems.parse(await FoodItemRepository.findFoodItemsByUserId(321))
 
@@ -141,7 +150,8 @@ describe('FoodItem Repository', () => {
     await FoodItemRepository.deleteFoodItem(1)
 
     try {
-      expect(await FoodItemRepository.findFoodItemById(1)).toThrowError()
+      await FoodItemRepository.findFoodItemById(1)
+      throw new Error() // fails test if expected error was not thrown
     } catch (err: unknown) {
       expect(err).toBeInstanceOf(NoResultError)
     }
