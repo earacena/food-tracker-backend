@@ -3,6 +3,7 @@ import { PORT } from './config'
 import foodItemRouter from './api/foodItems/foodItem.routes'
 import errorHandler from './middleware/errorHandler.middleware'
 import mealRouter from './api/meals/meal.routes'
+import mealEntryRouter from './api/mealEntries/mealEntry.routes'
 
 const expressApp = express()
 
@@ -12,6 +13,7 @@ expressApp.use(express.json())
 // Routes
 expressApp.use('/api/foodItems', foodItemRouter)
 expressApp.use('/api/meals', mealRouter)
+expressApp.use('/api/mealEntries', mealEntryRouter)
 
 // Post-route middleware
 expressApp.use(errorHandler)
