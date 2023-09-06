@@ -6,11 +6,13 @@ import { NODE_ENV, databaseCredentials } from '../config'
 import { type FoodItemTable } from '../api/foodItems/foodItem.model'
 import { type MealTable } from '../api/meals/meal.model'
 import { type MealEntryTable } from '../api/mealEntries/mealEntry.model'
+import { type ActivityTable } from '../api/activities/activity.model'
 
 interface Database {
   foodItem: FoodItemTable
   meal: MealTable
   mealEntry: MealEntryTable
+  activity: ActivityTable
 }
 
 const mainDialect = new PostgresDialect({
