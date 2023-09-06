@@ -1,6 +1,7 @@
+import { NoResultError } from 'kysely'
 import { db } from '../../utils/db'
 import MealEntryRepository from './mealEntry.repository'
-import { zMealEntries } from './mealEntry.types'
+import { zMealEntries, zMealEntry } from './mealEntry.types'
 
 describe('MealEntry Repository', () => {
   beforeAll(async () => {
@@ -44,6 +45,17 @@ describe('MealEntry Repository', () => {
       .execute()
   })
 
+  test('should return mealEntry with given id', async () => {
+    const mealEntry = zMealEntry.parse(await MealEntryRepository.findMealEntryById(1))
+
+    expect(mealEntry).toStrictEqual({
+      id: 1,
+      userId: 1,
+      foodItemId: 1,
+      mealId: 1
+    })
+  })
+
   test('should return all meal entries for given mealId', async () => {
     const mealEntries = zMealEntries.parse(await MealEntryRepository.findAllMealEntriesByMealId(1))
 
@@ -61,5 +73,16 @@ describe('MealEntry Repository', () => {
         mealId: 1
       }
     ])
+  })
+
+  test('should delete a meal entry', async () => {
+    await MealEntryRepository.deleteMealEntry(1)
+
+    try {
+      await MealEntryRepository.findMealEntryById(1)
+      throw new Error()
+    } catch (err: unknown) {
+      expect(err).toBeInstanceOf(NoResultError)
+    }
   })
 })
