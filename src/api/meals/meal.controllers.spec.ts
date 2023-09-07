@@ -61,6 +61,18 @@ describe('Meal API', () => {
       })
     })
 
+    test('should return 404 when meal does not exist', async () => {
+      const response = await api
+        .get('/api/meals/123123')
+        .expect(404)
+
+      const responseData = JSON.parse(response.text)
+      expect(responseData).toStrictEqual({
+        success: false,
+        errorMessage: 'meal not found'
+      })
+    })
+
     test('should return meals with given userId', async () => {
       const response = await api
         .get('/api/meals/user/312')
@@ -150,7 +162,8 @@ describe('Meal API', () => {
 
       const responseData = JSON.parse(response.text)
       expect(responseData).toStrictEqual({
-        success: false
+        success: false,
+        errorMessage: 'meal not found'
       })
     })
   })
