@@ -74,4 +74,30 @@ describe('MealEntry API', () => {
       })
     })
   })
+
+  describe('when creating mealEntry', () => {
+    test('should create mealEntry and return it', async () => {
+      const response = await api
+        .post('/api/mealEntries/')
+        .send({
+          userId: 1,
+          mealId: 3,
+          foodItemId: null
+        })
+        .expect(201)
+
+      const responseData = JSON.parse(response.text)
+      expect(responseData).toStrictEqual({
+        success: true,
+        data: {
+          newMealEntry: {
+            id: 4,
+            userId: 1,
+            foodItemId: null,
+            mealId: 3
+          }
+        }
+      })
+    })
+  })
 })
