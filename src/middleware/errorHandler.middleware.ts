@@ -6,6 +6,7 @@ import type {
 } from 'express'
 import { NoResultError } from 'kysely'
 import FoodItemNotFoundError from '../utils/errors/FoodItemNotFoundError'
+import { MealEntryNotFoundError, MealNotFoundError } from '../utils/errors'
 
 const errorHandler: ErrorRequestHandler = (
   err: any,
@@ -19,12 +20,12 @@ const errorHandler: ErrorRequestHandler = (
       .json({
         success: false
       })
-  } else if (err instanceof FoodItemNotFoundError) {
+  } else if (err instanceof FoodItemNotFoundError || err instanceof MealEntryNotFoundError || err instanceof MealNotFoundError) {
     res
       .status(404)
       .json({
         success: false,
-        errorMessage: 'foodItem not found'
+        errorMessage: err.message
       })
   } else {
     res
