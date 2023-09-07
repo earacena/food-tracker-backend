@@ -15,6 +15,6 @@ export const zMealIdParams = z.object({
 
 export const zMealEntryDetails = z.object({
   userId: z.number(),
-  foodItem: z.number().nullable(),
+  foodItemId: z.number().nullable(),
   mealId: z.number().nullable()
 })
