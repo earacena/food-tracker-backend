@@ -1,11 +1,12 @@
 import { db } from '../../utils/db'
+import { MealNotFoundError } from '../../utils/errors'
 import { type NewMeal, type Meal, type MealUpdate } from './meal.model'
 
 export async function findMealById (id: number): Promise<Meal> {
   return await db.selectFrom('meal')
     .where('id', '=', id)
     .selectAll()
-    .executeTakeFirstOrThrow()
+    .executeTakeFirstOrThrow(() => new MealNotFoundError('meal not found'))
 }
 
 export async function findMealsByUserId (userId: number): Promise<Meal[]> {

@@ -1,7 +1,7 @@
-import { NoResultError } from 'kysely'
 import { db } from '../../utils/db'
 import { zMeal, zMeals } from './meal.types'
 import MealRepository from './meal.repository'
+import { MealNotFoundError } from '../../utils/errors'
 
 describe('Meal Repository', () => {
   const currentTimestamp = new Date()
@@ -49,12 +49,12 @@ describe('Meal Repository', () => {
     })
   })
 
-  test('should throw an error if foodItem is not found', async () => {
+  test('should throw an error if meal is not found', async () => {
     try {
       await MealRepository.findMealById(222)
       throw new Error() // fails test if expected error is not thrown
     } catch (err: unknown) {
-      expect(err).toBeInstanceOf(NoResultError)
+      expect(err).toBeInstanceOf(MealNotFoundError)
     }
   })
 
@@ -109,7 +109,7 @@ describe('Meal Repository', () => {
       await MealRepository.findMealById(1)
       throw new Error() // fails test if expected error is not thrown
     } catch (err: unknown) {
-      expect(err).toBeInstanceOf(NoResultError)
+      expect(err).toBeInstanceOf(MealNotFoundError)
     }
   })
 })
