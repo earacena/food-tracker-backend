@@ -1,4 +1,5 @@
 import { db } from '../../utils/db'
+import FoodItemNotFoundError from '../../utils/errors/FoodItemNotFoundError'
 import type {
   FoodItem,
   FoodItemUpdate,
@@ -9,7 +10,7 @@ export async function findFoodItemById (id: number): Promise<FoodItem> {
   return await db.selectFrom('foodItem')
     .where('id', '=', id)
     .selectAll()
-    .executeTakeFirstOrThrow()
+    .executeTakeFirstOrThrow(() => new FoodItemNotFoundError('foodItem not found'))
 }
 
 export async function findFoodItemsByUserId (userId: number): Promise<FoodItem[]> {

@@ -95,6 +95,18 @@ describe('FoodItem API', () => {
         }
       })
     })
+
+    test('should return 404 when fetching foodItem that doesn\'t exist', async () => {
+      const response = await api
+        .get('/api/foodItems/1000')
+        .expect(404)
+
+      const responseData = JSON.parse(response.text)
+      expect(responseData).toStrictEqual({
+        success: false,
+        errorMessage: 'foodItem not found'
+      })
+    })
   })
 
   describe('when creating foodItems', () => {
@@ -175,7 +187,8 @@ describe('FoodItem API', () => {
 
       const responseData = JSON.parse(response.text)
       expect(responseData).toStrictEqual({
-        success: false
+        success: false,
+        errorMessage: 'foodItem not found'
       })
     })
   })
