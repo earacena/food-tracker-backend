@@ -1,12 +1,12 @@
 import type { NextFunction, Request, Response } from 'express'
 import FoodItemRepository from './foodItem.repository'
-import { zFoodItem, zFoodItemDetails, zFoodItemUpdatableFields } from './foodItem.types'
+import { zFoodItem, zFoodItemDetails, zFoodItemUpdatableFields, zFoodItems } from './foodItem.types'
 import { zIdParams, zUserIdParams } from '../../common.types'
 
 export async function getFoodItemController (req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const { id } = zIdParams.parse(req.params)
-    const foodItem = await FoodItemRepository.findFoodItemById(id)
+    const foodItem = zFoodItem.parse(await FoodItemRepository.findFoodItemById(id))
 
     res.status(200)
       .json({
@@ -23,7 +23,7 @@ export async function getFoodItemController (req: Request, res: Response, next: 
 export async function getFoodItemsOfUserController (req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const { userId } = zUserIdParams.parse(req.params)
-    const userFoodItems = await FoodItemRepository.findFoodItemsByUserId(userId)
+    const userFoodItems = zFoodItems.parse(await FoodItemRepository.findFoodItemsByUserId(userId))
 
     res.status(200)
       .json({
@@ -40,7 +40,7 @@ export async function getFoodItemsOfUserController (req: Request, res: Response,
 export async function createFoodItemController (req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const foodItemDetails = zFoodItemDetails.parse(req.body)
-    const newFoodItem = await FoodItemRepository.createFoodItem({ ...foodItemDetails })
+    const newFoodItem = zFoodItem.parse(await FoodItemRepository.createFoodItem(foodItemDetails))
 
     res.status(201)
       .json({
