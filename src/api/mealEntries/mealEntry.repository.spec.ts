@@ -1,7 +1,7 @@
-import { NoResultError } from 'kysely'
 import { db } from '../../utils/db'
 import MealEntryRepository from './mealEntry.repository'
 import { zMealEntries, zMealEntry } from './mealEntry.types'
+import { MealEntryNotFoundError } from '../../utils/errors'
 
 describe('MealEntry Repository', () => {
   beforeAll(async () => {
@@ -56,6 +56,15 @@ describe('MealEntry Repository', () => {
     })
   })
 
+  test('should throw an error if mealEntry is not found', async () => {
+    try {
+      await MealEntryRepository.findMealEntryById(1111)
+      throw new Error()
+    } catch (err: unknown) {
+      expect(err).toBeInstanceOf(MealEntryNotFoundError)
+    }
+  })
+
   test('should return all meal entries for given mealId', async () => {
     const mealEntries = zMealEntries.parse(await MealEntryRepository.findAllMealEntriesByMealId(1))
 
@@ -96,7 +105,7 @@ describe('MealEntry Repository', () => {
       await MealEntryRepository.findMealEntryById(1)
       throw new Error()
     } catch (err: unknown) {
-      expect(err).toBeInstanceOf(NoResultError)
+      expect(err).toBeInstanceOf(MealEntryNotFoundError)
     }
   })
 })
