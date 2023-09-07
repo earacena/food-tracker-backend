@@ -10,8 +10,8 @@ describe('MealEntry API', () => {
       .createTable('mealEntry')
       .addColumn('id', 'integer', (cb) => cb.autoIncrement().primaryKey())
       .addColumn('userId', 'integer', (cb) => cb.notNull())
-      .addColumn('mealId', 'integer', (cb) => cb.notNull())
-      .addColumn('foodItemId', 'integer', (cb) => cb.notNull())
+      .addColumn('mealId', 'integer')
+      .addColumn('foodItemId', 'integer')
       .execute()
 
     // Add test data
