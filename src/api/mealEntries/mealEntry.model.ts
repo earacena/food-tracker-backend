@@ -8,8 +8,8 @@ import type {
 export interface MealEntryTable {
   id: Generated<number>
   userId: number
-  foodItemId: number
-  mealId: number
+  foodItemId: number | null
+  mealId: number | null
 }
 
 export type MealEntry = Selectable<MealEntryTable>
