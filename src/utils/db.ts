@@ -7,12 +7,14 @@ import { type FoodItemTable } from '../api/foodItems/foodItem.model'
 import { type MealTable } from '../api/meals/meal.model'
 import { type MealEntryTable } from '../api/mealEntries/mealEntry.model'
 import { type ActivityTable } from '../api/activities/activity.model'
+import { type ProfileTable } from '../api/profiles/profile.model'
 
 interface Database {
   foodItem: FoodItemTable
   meal: MealTable
   mealEntry: MealEntryTable
   activity: ActivityTable
+  profile: ProfileTable
 }
 
 const mainDialect = new PostgresDialect({
