@@ -1,8 +1,14 @@
 import supertest from 'supertest'
 import { db } from '../../utils/db'
 import app from '../../app'
+import { type NextFunction, type Request, type Response } from 'express'
 
 const api = supertest(app.expressApp)
+
+jest.mock('../../middleware/authenticate.ts', () => jest.fn((req: Request, _res: Response, next: NextFunction) => {
+  req.body.token = 'token'
+  next()
+}))
 
 describe('MealEntry API', () => {
   beforeAll(async () => {
