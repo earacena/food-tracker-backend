@@ -5,5 +5,5 @@ export const zIdParams = z.object({
 })
 
 export const zUserIdParams = z.object({
-  userId: z.coerce.number()
+  userId: z.string().uuid()
 })

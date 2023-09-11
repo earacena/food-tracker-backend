@@ -9,7 +9,7 @@ export async function findMealById (id: number): Promise<Meal> {
     .executeTakeFirstOrThrow(() => new MealNotFoundError('meal not found'))
 }
 
-export async function findMealsByUserId (userId: number): Promise<Meal[]> {
+export async function findMealsByUserId (userId: string): Promise<Meal[]> {
   return await db.selectFrom('meal')
     .where('userId', '=', userId)
     .selectAll()

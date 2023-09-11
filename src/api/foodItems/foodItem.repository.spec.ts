@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto'
 import { db } from '../../utils/db'
 import FoodItemRepository from './foodItem.repository'
 import { zFoodItem, zFoodItems } from './foodItem.types'
@@ -5,12 +6,14 @@ import { FoodItemNotFoundError } from '../../utils/errors'
 
 describe('FoodItem Repository', () => {
   const currentTimestamp = new Date()
+  const userId1 = randomUUID()
+  const userId2 = randomUUID()
 
   beforeAll(async () => {
     await db.schema.createTable('foodItem')
       .addColumn('id', 'integer', (cb) => cb.autoIncrement().primaryKey())
       .addColumn('foodName', 'text', (cb) => cb.notNull())
-      .addColumn('userId', 'integer', (cb) => cb.notNull())
+      .addColumn('userId', 'uuid', (cb) => cb.notNull())
       .addColumn('caloriesPerServing', 'integer', (cb) => cb.notNull())
       .addColumn('servingSizeInGrams', 'integer')
       .addColumn('servingSizeInUnits', 'integer')
@@ -25,7 +28,7 @@ describe('FoodItem Repository', () => {
       .values({
         id: 1,
         foodName: 'Apple',
-        userId: 321,
+        userId: userId1,
         caloriesPerServing: 100,
         servingSizeInGrams: 150,
         searchVisibility: 'private'
@@ -36,7 +39,7 @@ describe('FoodItem Repository', () => {
       .values({
         id: 2,
         foodName: 'Banana',
-        userId: 323,
+        userId: userId2,
         caloriesPerServing: 1000,
         servingSizeInUnits: 1,
         searchVisibility: 'public'
@@ -47,7 +50,7 @@ describe('FoodItem Repository', () => {
       .values({
         id: 3,
         foodName: 'Pear',
-        userId: 321,
+        userId: userId1,
         caloriesPerServing: 10,
         servingSizeInUnits: 1,
         searchVisibility: 'private'
@@ -65,7 +68,7 @@ describe('FoodItem Repository', () => {
     expect(foodItem).toStrictEqual({
       id: 1,
       foodName: 'Apple',
-      userId: 321,
+      userId: userId1,
       caloriesPerServing: 100,
       servingSizeInGrams: 150,
       servingSizeInUnits: null,
@@ -84,13 +87,13 @@ describe('FoodItem Repository', () => {
   })
 
   test('should find all foodItems belonging to user', async () => {
-    const foodItems = zFoodItems.parse(await FoodItemRepository.findFoodItemsByUserId(321))
+    const foodItems = zFoodItems.parse(await FoodItemRepository.findFoodItemsByUserId(userId1))
 
     expect(foodItems).toStrictEqual([
       {
         id: 1,
         foodName: 'Apple',
-        userId: 321,
+        userId: userId1,
         caloriesPerServing: 100,
         servingSizeInGrams: 150,
         servingSizeInUnits: null,
@@ -100,7 +103,7 @@ describe('FoodItem Repository', () => {
       {
         id: 3,
         foodName: 'Pear',
-        userId: 321,
+        userId: userId1,
         caloriesPerServing: 10,
         servingSizeInUnits: 1,
         servingSizeInGrams: null,
@@ -116,7 +119,7 @@ describe('FoodItem Repository', () => {
     expect(updatedFoodItem).toStrictEqual({
       id: 1,
       foodName: 'Super Apple',
-      userId: 321,
+      userId: userId1,
       caloriesPerServing: 100,
       servingSizeInGrams: 150,
       servingSizeInUnits: null,
@@ -128,7 +131,7 @@ describe('FoodItem Repository', () => {
   test('should create a foodItem and return it', async () => {
     const newFoodItem = zFoodItem.parse(await FoodItemRepository.createFoodItem({
       foodName: 'New Apple',
-      userId: 321,
+      userId: userId1,
       caloriesPerServing: 150,
       servingSizeInUnits: 1,
       searchVisibility: 'public'
@@ -137,7 +140,7 @@ describe('FoodItem Repository', () => {
     expect(newFoodItem).toStrictEqual({
       id: 4,
       foodName: 'New Apple',
-      userId: 321,
+      userId: userId1,
       caloriesPerServing: 150,
       servingSizeInUnits: 1,
       servingSizeInGrams: null,

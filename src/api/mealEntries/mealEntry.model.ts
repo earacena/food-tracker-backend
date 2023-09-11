@@ -7,7 +7,7 @@ import type {
 
 export interface MealEntryTable {
   id: Generated<number>
-  userId: number
+  userId: string
   foodItemId: number | null
   mealId: number | null
 }

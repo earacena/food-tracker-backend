@@ -1,5 +1,6 @@
-import { db } from '../../utils/db'
+import { randomUUID } from 'crypto'
 import supertest from 'supertest'
+import { db } from '../../utils/db'
 import app from '../../app'
 import type { NextFunction, Request, Response } from 'express'
 
@@ -12,12 +13,14 @@ jest.mock('../../middleware/authenticate.ts', () => jest.fn((req: Request, _res:
 
 describe('FoodItem API', () => {
   const currentTimestamp = new Date().toISOString()
+  const userId1 = randomUUID()
+  const userId2 = randomUUID()
 
   beforeAll(async () => {
     await db.schema.createTable('foodItem')
       .addColumn('id', 'integer', (cb) => cb.autoIncrement().primaryKey())
       .addColumn('foodName', 'text', (cb) => cb.notNull())
-      .addColumn('userId', 'integer', (cb) => cb.notNull())
+      .addColumn('userId', 'uuid', (cb) => cb.notNull())
       .addColumn('caloriesPerServing', 'integer', (cb) => cb.notNull())
       .addColumn('servingSizeInGrams', 'integer')
       .addColumn('servingSizeInUnits', 'integer')
@@ -32,7 +35,7 @@ describe('FoodItem API', () => {
       .values({
         id: 1,
         foodName: 'Apple',
-        userId: 321,
+        userId: userId1,
         caloriesPerServing: 100,
         servingSizeInGrams: 150,
         createdAt: currentTimestamp,
@@ -44,7 +47,7 @@ describe('FoodItem API', () => {
       .values({
         id: 2,
         foodName: 'Banana',
-        userId: 323,
+        userId: userId2,
         caloriesPerServing: 1000,
         servingSizeInUnits: 1,
         createdAt: currentTimestamp,
@@ -66,7 +69,7 @@ describe('FoodItem API', () => {
           foodItem: {
             id: 1,
             foodName: 'Apple',
-            userId: 321,
+            userId: userId1,
             caloriesPerServing: 100,
             servingSizeInGrams: 150,
             servingSizeInUnits: null,
@@ -79,7 +82,7 @@ describe('FoodItem API', () => {
 
     test('should return foodItems associated with userId', async () => {
       const response = await api
-        .get('/api/foodItems/user/323')
+        .get(`/api/foodItems/user/${userId2}`)
         .expect(200)
 
       const responseData = JSON.parse(response.text)
@@ -90,7 +93,7 @@ describe('FoodItem API', () => {
             {
               id: 2,
               foodName: 'Banana',
-              userId: 323,
+              userId: userId2,
               caloriesPerServing: 1000,
               servingSizeInGrams: null,
               servingSizeInUnits: 1,
@@ -121,7 +124,7 @@ describe('FoodItem API', () => {
         .post('/api/foodItems/')
         .send({
           foodName: 'Super Apple',
-          userId: 323,
+          userId: userId2,
           caloriesPerServing: 2000,
           servingSizeInUnits: 3,
           servingSizeInGrams: null,
@@ -137,7 +140,7 @@ describe('FoodItem API', () => {
           newFoodItem: {
             id: 3,
             foodName: 'Super Apple',
-            userId: 323,
+            userId: userId2,
             caloriesPerServing: 2000,
             servingSizeInGrams: null,
             servingSizeInUnits: 3,
@@ -169,7 +172,7 @@ describe('FoodItem API', () => {
           updatedFoodItem: {
             id: 1,
             foodName: 'Good Apple',
-            userId: 321,
+            userId: userId1,
             caloriesPerServing: 200,
             servingSizeInGrams: null,
             servingSizeInUnits: 1,

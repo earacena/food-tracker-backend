@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto'
 import { db } from '../../utils/db'
 import { zMeal, zMeals } from './meal.types'
 import MealRepository from './meal.repository'
@@ -5,12 +6,13 @@ import { MealNotFoundError } from '../../utils/errors'
 
 describe('Meal Repository', () => {
   const currentTimestamp = new Date()
+  const userId = randomUUID()
 
   beforeAll(async () => {
     await db.schema.createTable('meal')
       .addColumn('id', 'integer', (cb) => cb.autoIncrement().primaryKey()) // Sqlite3 specific
       .addColumn('name', 'text', (cb) => cb.notNull())
-      .addColumn('userId', 'integer', (cb) => cb.notNull())
+      .addColumn('userId', 'uuid', (cb) => cb.notNull())
       .addColumn('createdAt', 'timestamp', (cb) =>
         cb.notNull().defaultTo(currentTimestamp)
       )
@@ -20,7 +22,7 @@ describe('Meal Repository', () => {
     await db.insertInto('meal')
       .values({
         id: 1,
-        userId: 312,
+        userId,
         name: 'english breakfast'
       })
       .executeTakeFirst()
@@ -28,7 +30,7 @@ describe('Meal Repository', () => {
     await db.insertInto('meal')
       .values({
         id: 2,
-        userId: 312,
+        userId,
         name: 'smoothie'
       })
       .executeTakeFirst()
@@ -43,7 +45,7 @@ describe('Meal Repository', () => {
 
     expect(meal).toStrictEqual({
       id: 1,
-      userId: 312,
+      userId,
       name: 'english breakfast',
       createdAt: currentTimestamp
     })
@@ -59,18 +61,18 @@ describe('Meal Repository', () => {
   })
 
   test('should return all meals belonging to user', async () => {
-    const meals = zMeals.parse(await MealRepository.findMealsByUserId(312))
+    const meals = zMeals.parse(await MealRepository.findMealsByUserId(userId))
 
     expect(meals).toStrictEqual([
       {
         id: 1,
-        userId: 312,
+        userId,
         name: 'english breakfast',
         createdAt: currentTimestamp
       },
       {
         id: 2,
-        userId: 312,
+        userId,
         name: 'smoothie',
         createdAt: currentTimestamp
       }
@@ -82,7 +84,7 @@ describe('Meal Repository', () => {
 
     expect(updatedMeal).toStrictEqual({
       id: 2,
-      userId: 312,
+      userId,
       name: 'apple smoothie',
       createdAt: currentTimestamp
     })
@@ -91,12 +93,12 @@ describe('Meal Repository', () => {
   test('should create a meal', async () => {
     const newMeal = zMeal.parse(await MealRepository.createMeal({
       name: 'Dinner',
-      userId: 312
+      userId
     }))
 
     expect(newMeal).toStrictEqual({
       id: 3,
-      userId: 312,
+      userId,
       name: 'Dinner',
       createdAt: currentTimestamp
     })

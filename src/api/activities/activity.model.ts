@@ -2,7 +2,7 @@ import type { Updateable, Insertable, Selectable, Generated, ColumnType } from '
 
 export interface ActivityTable {
   id: Generated<number>
-  userId: number
+  userId: string
   mealId: number | null
   foodItemId: number | null
   createdAt: ColumnType<Date, string | undefined, never>

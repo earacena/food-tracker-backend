@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto'
 import supertest from 'supertest'
 import { db } from '../../utils/db'
 import app from '../../app'
@@ -12,6 +13,8 @@ jest.mock('../../middleware/authenticate.ts', () => jest.fn((req: Request, _res:
 
 describe('Meal API', () => {
   const currentTimestamp = new Date().toISOString()
+  const userId1 = randomUUID()
+  const userId2 = randomUUID()
 
   beforeAll(async () => {
     await db.schema.createTable('meal')
@@ -25,7 +28,7 @@ describe('Meal API', () => {
     await db.insertInto('meal')
       .values({
         id: 1,
-        userId: 312,
+        userId: userId1,
         name: 'english breakfast'
       })
       .execute()
@@ -33,7 +36,7 @@ describe('Meal API', () => {
     await db.insertInto('meal')
       .values({
         id: 2,
-        userId: 312,
+        userId: userId1,
         name: 'smoothie'
       })
       .execute()
@@ -41,7 +44,7 @@ describe('Meal API', () => {
     await db.insertInto('meal')
       .values({
         id: 3,
-        userId: 234,
+        userId: userId2,
         name: 'dinner'
       })
       .execute()
@@ -59,7 +62,7 @@ describe('Meal API', () => {
         data: {
           meal: {
             id: 1,
-            userId: 312,
+            userId: userId1,
             name: 'english breakfast',
             createdAt: currentTimestamp
           }
@@ -81,7 +84,7 @@ describe('Meal API', () => {
 
     test('should return meals with given userId', async () => {
       const response = await api
-        .get('/api/meals/user/312')
+        .get(`/api/meals/user/${userId1}`)
         .expect(200)
 
       const responseData = JSON.parse(response.text)
@@ -91,13 +94,13 @@ describe('Meal API', () => {
           userMeals: [
             {
               id: 1,
-              userId: 312,
+              userId: userId1,
               name: 'english breakfast',
               createdAt: currentTimestamp
             },
             {
               id: 2,
-              userId: 312,
+              userId: userId1,
               name: 'smoothie',
               createdAt: currentTimestamp
             }
@@ -112,7 +115,7 @@ describe('Meal API', () => {
       const response = await api
         .post('/api/meals/')
         .send({
-          userId: 312,
+          userId: userId1,
           name: 'simple lunch'
         })
         .expect(201)
@@ -123,7 +126,7 @@ describe('Meal API', () => {
         data: {
           newMeal: {
             id: 4,
-            userId: 312,
+            userId: userId1,
             name: 'simple lunch',
             createdAt: currentTimestamp
           }
@@ -147,7 +150,7 @@ describe('Meal API', () => {
         data: {
           updatedMeal: {
             id: 2,
-            userId: 312,
+            userId: userId1,
             name: 'small smoothie',
             createdAt: currentTimestamp
           }

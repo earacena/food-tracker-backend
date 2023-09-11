@@ -1,14 +1,18 @@
+import { randomUUID } from 'crypto'
 import { db } from '../../utils/db'
 import MealEntryRepository from './mealEntry.repository'
 import { zMealEntries, zMealEntry } from './mealEntry.types'
 import { MealEntryNotFoundError } from '../../utils/errors'
 
 describe('MealEntry Repository', () => {
+  const userId1 = randomUUID()
+  const userId2 = randomUUID()
+
   beforeAll(async () => {
     await db.schema
       .createTable('mealEntry')
       .addColumn('id', 'integer', (cb) => cb.autoIncrement().primaryKey())
-      .addColumn('userId', 'integer', (cb) => cb.notNull())
+      .addColumn('userId', 'uuid', (cb) => cb.notNull())
       .addColumn('mealId', 'integer')
       .addColumn('foodItemId', 'integer')
       .execute()
@@ -16,7 +20,7 @@ describe('MealEntry Repository', () => {
     // Add test data
     await db.insertInto('mealEntry')
       .values({
-        userId: 1,
+        userId: userId1,
         foodItemId: 1,
         mealId: 1
       })
@@ -24,7 +28,7 @@ describe('MealEntry Repository', () => {
 
     await db.insertInto('mealEntry')
       .values({
-        userId: 1,
+        userId: userId1,
         foodItemId: 2,
         mealId: 1
       })
@@ -32,7 +36,7 @@ describe('MealEntry Repository', () => {
 
     await db.insertInto('mealEntry')
       .values({
-        userId: 2,
+        userId: userId2,
         foodItemId: 1,
         mealId: 2
       })
@@ -50,7 +54,7 @@ describe('MealEntry Repository', () => {
 
     expect(mealEntry).toStrictEqual({
       id: 1,
-      userId: 1,
+      userId: userId1,
       foodItemId: 1,
       mealId: 1
     })
@@ -71,13 +75,13 @@ describe('MealEntry Repository', () => {
     expect(mealEntries).toStrictEqual([
       {
         id: 1,
-        userId: 1,
+        userId: userId1,
         foodItemId: 1,
         mealId: 1
       },
       {
         id: 2,
-        userId: 1,
+        userId: userId1,
         foodItemId: 2,
         mealId: 1
       }
@@ -86,13 +90,13 @@ describe('MealEntry Repository', () => {
 
   test('should create a meal entry and return it', async () => {
     const newMealEntry = zMealEntry.parse(await MealEntryRepository.createMealEntry({
-      userId: 1,
+      userId: userId1,
       mealId: 10
     }))
 
     expect(newMealEntry).toStrictEqual({
       id: 4,
-      userId: 1,
+      userId: userId1,
       foodItemId: null,
       mealId: 10
     })

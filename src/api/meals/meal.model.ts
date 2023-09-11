@@ -8,7 +8,7 @@ import type {
 
 export interface MealTable {
   id: Generated<number>
-  userId: number
+  userId: string
   name: string
   createdAt: ColumnType<Date, string | undefined, never>
 };

@@ -1,7 +1,8 @@
+import { type NextFunction, type Request, type Response } from 'express'
 import supertest from 'supertest'
+import { randomUUID } from 'crypto'
 import { db } from '../../utils/db'
 import app from '../../app'
-import { type NextFunction, type Request, type Response } from 'express'
 
 const api = supertest(app.expressApp)
 
@@ -11,11 +12,14 @@ jest.mock('../../middleware/authenticate.ts', () => jest.fn((req: Request, _res:
 }))
 
 describe('MealEntry API', () => {
+  const userId1 = randomUUID()
+  const userId2 = randomUUID()
+
   beforeAll(async () => {
     await db.schema
       .createTable('mealEntry')
       .addColumn('id', 'integer', (cb) => cb.autoIncrement().primaryKey())
-      .addColumn('userId', 'integer', (cb) => cb.notNull())
+      .addColumn('userId', 'uuid', (cb) => cb.notNull())
       .addColumn('mealId', 'integer')
       .addColumn('foodItemId', 'integer')
       .execute()
@@ -23,7 +27,7 @@ describe('MealEntry API', () => {
     // Add test data
     await db.insertInto('mealEntry')
       .values({
-        userId: 1,
+        userId: userId1,
         foodItemId: 1,
         mealId: 1
       })
@@ -31,7 +35,7 @@ describe('MealEntry API', () => {
 
     await db.insertInto('mealEntry')
       .values({
-        userId: 1,
+        userId: userId1,
         foodItemId: 2,
         mealId: 1
       })
@@ -39,7 +43,7 @@ describe('MealEntry API', () => {
 
     await db.insertInto('mealEntry')
       .values({
-        userId: 2,
+        userId: userId2,
         foodItemId: 1,
         mealId: 2
       })
@@ -64,7 +68,7 @@ describe('MealEntry API', () => {
         data: {
           mealEntry: {
             id: 1,
-            userId: 1,
+            userId: userId1,
             foodItemId: 1,
             mealId: 1
           }
@@ -84,13 +88,13 @@ describe('MealEntry API', () => {
           mealEntries: [
             {
               id: 1,
-              userId: 1,
+              userId: userId1,
               foodItemId: 1,
               mealId: 1
             },
             {
               id: 2,
-              userId: 1,
+              userId: userId1,
               foodItemId: 2,
               mealId: 1
             }
@@ -105,7 +109,7 @@ describe('MealEntry API', () => {
       const response = await api
         .post('/api/mealEntries/')
         .send({
-          userId: 1,
+          userId: userId2,
           mealId: 3,
           foodItemId: null
         })
@@ -117,7 +121,7 @@ describe('MealEntry API', () => {
         data: {
           newMealEntry: {
             id: 4,
-            userId: 1,
+            userId: userId2,
             foodItemId: null,
             mealId: 3
           }

@@ -9,7 +9,7 @@ import type {
 export interface FoodItemTable {
   id: Generated<number>
   foodName: string
-  userId: number
+  userId: string
   caloriesPerServing: number
   servingSizeInGrams: number | null
   servingSizeInUnits: number | null

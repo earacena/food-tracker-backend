@@ -13,7 +13,7 @@ export async function findFoodItemById (id: number): Promise<FoodItem> {
     .executeTakeFirstOrThrow(() => new FoodItemNotFoundError('foodItem not found'))
 }
 
-export async function findFoodItemsByUserId (userId: number): Promise<FoodItem[]> {
+export async function findFoodItemsByUserId (userId: string): Promise<FoodItem[]> {
   return await db.selectFrom('foodItem')
     .where('userId', '=', userId)
     .selectAll()
