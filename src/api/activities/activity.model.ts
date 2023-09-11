@@ -1,4 +1,4 @@
-import { type Updateable, type Insertable, type Selectable, type Generated, ColumnType } from 'kysely'
+import type { Updateable, Insertable, Selectable, Generated, ColumnType } from 'kysely'
 
 export interface ActivityTable {
   id: Generated<number>
