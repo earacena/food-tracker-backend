@@ -1,19 +1,19 @@
 import type {
-  ErrorRequestHandler,
   Request,
   Response,
-  NextFunction
+  NextFunction,
+  ErrorRequestHandler
 } from 'express'
 import { NoResultError } from 'kysely'
 import FoodItemNotFoundError from '../utils/errors/FoodItemNotFoundError'
-import { MealEntryNotFoundError, MealNotFoundError } from '../utils/errors'
+import { AuthenticationError, MealEntryNotFoundError, MealNotFoundError } from '../utils/errors'
 
 const errorHandler: ErrorRequestHandler = (
   err: any,
   _req: Request,
   res: Response,
   next: NextFunction
-) => {
+): void => {
   if (err instanceof NoResultError) {
     res
       .status(404)
@@ -23,6 +23,13 @@ const errorHandler: ErrorRequestHandler = (
   } else if (err instanceof FoodItemNotFoundError || err instanceof MealEntryNotFoundError || err instanceof MealNotFoundError) {
     res
       .status(404)
+      .json({
+        success: false,
+        errorMessage: err.message
+      })
+  } else if (err instanceof AuthenticationError) {
+    res
+      .status(401)
       .json({
         success: false,
         errorMessage: err.message
