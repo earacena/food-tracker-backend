@@ -1,8 +1,14 @@
 import { db } from '../../utils/db'
 import supertest from 'supertest'
 import app from '../../app'
+import type { NextFunction, Request, Response } from 'express'
 
 const api = supertest(app.expressApp)
+
+jest.mock('../../middleware/authenticate.ts', () => jest.fn((req: Request, _res: Response, next: NextFunction) => {
+  req.body.token = 'token'
+  next()
+}))
 
 describe('FoodItem API', () => {
   const currentTimestamp = new Date().toISOString()
