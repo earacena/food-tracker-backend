@@ -2,7 +2,7 @@ import { db } from '../../utils/db'
 import { ProfileNotFoundError } from '../../utils/errors'
 import { type ProfileUpdate, type NewProfile, type Profile } from './profile.model'
 
-export async function findProfileById (userId: string): Promise<Profile> {
+export async function findProfileByUserId (userId: string): Promise<Profile> {
   return await db.selectFrom('profile')
     .where('userId', '=', userId)
     .selectAll()
@@ -32,7 +32,7 @@ export async function deleteProfile (userId: string): Promise<void> {
 }
 
 export default {
-  findProfileById,
+  findProfileByUserId,
   createProfile,
   updateProfile,
   deleteProfile

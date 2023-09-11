@@ -11,7 +11,7 @@ describe('Profile Repository', () => {
 
   beforeAll(async () => {
     await db.schema.createTable('profile')
-      .addColumn('userId', 'uuid', (cb) => cb.notNull())
+      .addColumn('userId', 'uuid', (cb) => cb.primaryKey())
       .addColumn('dailyCalorieGoal', 'integer')
       .addColumn('createdAt', 'timestamp', (cb) =>
         cb.notNull().defaultTo(currentTimestamp)
@@ -38,7 +38,7 @@ describe('Profile Repository', () => {
   })
 
   test('should return profile with a given id', async () => {
-    const profile = zProfile.parse(await ProfileRepository.findProfileById(userId1))
+    const profile = zProfile.parse(await ProfileRepository.findProfileByUserId(userId1))
 
     expect(profile).toStrictEqual({
       userId: userId1,
@@ -49,7 +49,7 @@ describe('Profile Repository', () => {
 
   test('should throw an error if profile is not found', async () => {
     try {
-      await ProfileRepository.findProfileById(crypto.randomUUID())
+      await ProfileRepository.findProfileByUserId(crypto.randomUUID())
       throw new Error() // fails test if expected error is not thrown
     } catch (err: unknown) {
       expect(err).toBeInstanceOf(ProfileNotFoundError)
@@ -84,7 +84,7 @@ describe('Profile Repository', () => {
     await ProfileRepository.deleteProfile(userId1)
 
     try {
-      await ProfileRepository.findProfileById(userId1)
+      await ProfileRepository.findProfileByUserId(userId1)
       throw new Error() // fails test if expected error is not thrown
     } catch (err: unknown) {
       expect(err).toBeInstanceOf(ProfileNotFoundError)
