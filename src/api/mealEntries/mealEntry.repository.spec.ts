@@ -13,8 +13,8 @@ describe('MealEntry Repository', () => {
       .createTable('mealEntry')
       .addColumn('id', 'integer', (cb) => cb.autoIncrement().primaryKey())
       .addColumn('userId', 'uuid', (cb) => cb.notNull())
-      .addColumn('mealId', 'integer')
-      .addColumn('foodItemId', 'integer')
+      .addColumn('mealId', 'integer', (cb) => cb.notNull())
+      .addColumn('foodItemId', 'integer', (cb) => cb.notNull())
       .execute()
 
     // Add test data
@@ -91,13 +91,14 @@ describe('MealEntry Repository', () => {
   test('should create a meal entry and return it', async () => {
     const newMealEntry = zMealEntry.parse(await MealEntryRepository.createMealEntry({
       userId: userId1,
+      foodItemId: 10,
       mealId: 10
     }))
 
     expect(newMealEntry).toStrictEqual({
       id: 4,
       userId: userId1,
-      foodItemId: null,
+      foodItemId: 10,
       mealId: 10
     })
   })
