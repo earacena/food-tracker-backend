@@ -111,7 +111,7 @@ describe('MealEntry API', () => {
         .send({
           userId: userId2,
           mealId: 3,
-          foodItemId: null
+          foodItemId: 10
         })
         .expect(201)
 
@@ -122,7 +122,7 @@ describe('MealEntry API', () => {
           newMealEntry: {
             id: 4,
             userId: userId2,
-            foodItemId: null,
+            foodItemId: 10,
             mealId: 3
           }
         }
