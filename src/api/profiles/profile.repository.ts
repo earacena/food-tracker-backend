@@ -6,7 +6,7 @@ export async function findProfileByUserId (userId: string): Promise<Profile> {
   return await db.selectFrom('profile')
     .where('userId', '=', userId)
     .selectAll()
-    .executeTakeFirstOrThrow(() => new ProfileNotFoundError('profile not found'))
+    .executeTakeFirstOrThrow(() => new ProfileNotFoundError('profile does not exist'))
 }
 
 export async function createProfile (profile: NewProfile): Promise<Profile> {
