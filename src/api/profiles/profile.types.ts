@@ -7,3 +7,12 @@ export const zProfile = z.object({
 })
 
 export const zProfiles = z.array(zProfile)
+
+export const zProfileDetails = z.object({
+  userId: z.string().uuid(),
+  dailyCalorieGoal: z.number().nullable()
+})
+
+export const zProfileUpdatableFields = z.object({
+  dailyCalorieGoal: z.number().nullable()
+})
