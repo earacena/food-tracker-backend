@@ -14,7 +14,6 @@ const errorHandler: ErrorRequestHandler = (
   res: Response,
   next: NextFunction
 ): void => {
-  console.log(err)
   if (err instanceof NoResultError) {
     res
       .status(404)
