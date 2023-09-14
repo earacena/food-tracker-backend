@@ -22,6 +22,7 @@ describe('MealEntry API', () => {
       .addColumn('userId', 'uuid', (cb) => cb.notNull())
       .addColumn('mealId', 'integer')
       .addColumn('foodItemId', 'integer')
+      .addColumn('quantity', 'integer', (cb) => cb.notNull())
       .execute()
 
     // Add test data
@@ -29,7 +30,8 @@ describe('MealEntry API', () => {
       .values({
         userId: userId1,
         foodItemId: 1,
-        mealId: 1
+        mealId: 1,
+        quantity: 2
       })
       .execute()
 
@@ -37,7 +39,8 @@ describe('MealEntry API', () => {
       .values({
         userId: userId1,
         foodItemId: 2,
-        mealId: 1
+        mealId: 1,
+        quantity: 1
       })
       .execute()
 
@@ -45,7 +48,8 @@ describe('MealEntry API', () => {
       .values({
         userId: userId2,
         foodItemId: 1,
-        mealId: 2
+        mealId: 2,
+        quantity: 2
       })
       .execute()
   })
@@ -70,7 +74,8 @@ describe('MealEntry API', () => {
             id: 1,
             userId: userId1,
             foodItemId: 1,
-            mealId: 1
+            mealId: 1,
+            quantity: 2
           }
         }
       })
@@ -90,13 +95,15 @@ describe('MealEntry API', () => {
               id: 1,
               userId: userId1,
               foodItemId: 1,
-              mealId: 1
+              mealId: 1,
+              quantity: 2
             },
             {
               id: 2,
               userId: userId1,
               foodItemId: 2,
-              mealId: 1
+              mealId: 1,
+              quantity: 1
             }
           ]
         }
@@ -111,7 +118,8 @@ describe('MealEntry API', () => {
         .send({
           userId: userId2,
           mealId: 3,
-          foodItemId: 10
+          foodItemId: 10,
+          quantity: 3
         })
         .expect(201)
 
@@ -123,7 +131,8 @@ describe('MealEntry API', () => {
             id: 4,
             userId: userId2,
             foodItemId: 10,
-            mealId: 3
+            mealId: 3,
+            quantity: 3
           }
         }
       })

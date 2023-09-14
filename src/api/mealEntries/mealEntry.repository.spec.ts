@@ -15,6 +15,7 @@ describe('MealEntry Repository', () => {
       .addColumn('userId', 'uuid', (cb) => cb.notNull())
       .addColumn('mealId', 'integer', (cb) => cb.notNull())
       .addColumn('foodItemId', 'integer', (cb) => cb.notNull())
+      .addColumn('quantity', 'integer', (cb) => cb.notNull())
       .execute()
 
     // Add test data
@@ -22,7 +23,8 @@ describe('MealEntry Repository', () => {
       .values({
         userId: userId1,
         foodItemId: 1,
-        mealId: 1
+        mealId: 1,
+        quantity: 2
       })
       .execute()
 
@@ -30,7 +32,8 @@ describe('MealEntry Repository', () => {
       .values({
         userId: userId1,
         foodItemId: 2,
-        mealId: 1
+        mealId: 1,
+        quantity: 1
       })
       .execute()
 
@@ -38,7 +41,8 @@ describe('MealEntry Repository', () => {
       .values({
         userId: userId2,
         foodItemId: 1,
-        mealId: 2
+        mealId: 2,
+        quantity: 2
       })
       .execute()
   })
@@ -56,7 +60,8 @@ describe('MealEntry Repository', () => {
       id: 1,
       userId: userId1,
       foodItemId: 1,
-      mealId: 1
+      mealId: 1,
+      quantity: 2
     })
   })
 
@@ -77,13 +82,15 @@ describe('MealEntry Repository', () => {
         id: 1,
         userId: userId1,
         foodItemId: 1,
-        mealId: 1
+        mealId: 1,
+        quantity: 2
       },
       {
         id: 2,
         userId: userId1,
         foodItemId: 2,
-        mealId: 1
+        mealId: 1,
+        quantity: 1
       }
     ])
   })
@@ -92,14 +99,16 @@ describe('MealEntry Repository', () => {
     const newMealEntry = zMealEntry.parse(await MealEntryRepository.createMealEntry({
       userId: userId1,
       foodItemId: 10,
-      mealId: 10
+      mealId: 10,
+      quantity: 3
     }))
 
     expect(newMealEntry).toStrictEqual({
       id: 4,
       userId: userId1,
       foodItemId: 10,
-      mealId: 10
+      mealId: 10,
+      quantity: 3
     })
   })
 
