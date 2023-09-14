@@ -8,7 +8,7 @@
     "build": "tsc",
     "dev": "NODE_ENV=dev ts-node-dev src/index.ts",
     "start": "NODE_ENV=prod build/index.js",
-    "test": "NODE_ENV=test jest --verbose",
+    "test": "NODE_ENV=test jest",
     "prepare": "husky install"
   },
   "repository": {
