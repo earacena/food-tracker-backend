@@ -22,7 +22,8 @@ CREATE TABLE mealEntry (
   id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   userId uuid NOT NULL,
   mealId INTEGER,
-  foodItemId INTEGER
+  foodItemId INTEGER,
+  quantity INTEGER
 );
 
 CREATE TABLE profile (
