@@ -2,11 +2,17 @@ import { type NextFunction, type Request, type Response } from 'express'
 import { KEYCLOAK_PUBLIC_KEY } from '../config'
 import Jwt from 'jsonwebtoken'
 import AuthenticationError from '../utils/errors/AuthenticationError'
+import { z } from 'zod'
 
-function extractJwt (req: Request): string | undefined {
-  const bearer = req.headers.authorization
-  const token = bearer?.split(' ')[1]
-  return token
+function extractJwt (req: Request): string | null {
+  const bearerResult = z.string().safeParse(req.headers['authentication'])
+  if (!bearerResult.success) {
+    return null
+  }
+  const bearer = bearerResult.data
+  const token = bearer.split(' ')[1]
+
+  return token ?? null
 }
 
 function decodeJwt (token: string): string | Jwt.JwtPayload {
@@ -19,12 +25,12 @@ function decodeJwt (token: string): string | Jwt.JwtPayload {
 
 function authenticate (req: Request, _res: Response, next: NextFunction): void {
   const token = extractJwt(req)
-  if (token !== undefined) {
+  if (token != null) {
     const decodedToken = decodeJwt(token)
-
     req.body.token = decodedToken
-
     next()
+
+    return
   }
 
   next(new AuthenticationError('must be authenticated to do this'))
