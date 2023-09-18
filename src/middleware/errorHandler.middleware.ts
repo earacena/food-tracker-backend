@@ -38,7 +38,8 @@ const errorHandler: ErrorRequestHandler = (
     res
       .status(500)
       .json({
-        success: false
+        success: false,
+        errorMessage: 'internal server error'
       })
   }
 
