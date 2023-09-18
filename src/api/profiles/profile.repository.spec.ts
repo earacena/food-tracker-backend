@@ -28,7 +28,8 @@ describe('Profile Repository', () => {
 
     await db.insertInto('profile')
       .values({
-        userId: userId2
+        userId: userId2,
+        dailyCalorieGoal: 2000
       })
       .execute()
   })

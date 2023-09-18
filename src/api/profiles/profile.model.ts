@@ -2,7 +2,7 @@ import type { Insertable, ColumnType, Selectable, Updateable } from 'kysely'
 
 export interface ProfileTable {
   userId: string
-  dailyCalorieGoal: number | null
+  dailyCalorieGoal: number
   createdAt: ColumnType<Date, string | undefined, never>
 }
 
