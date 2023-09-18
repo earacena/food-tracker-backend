@@ -12,6 +12,7 @@ const expressApp = express()
 
 // Pre-route middleware
 expressApp.use(express.json())
+expressApp.use(express.urlencoded({ extended: true }))
 
 // Routes
 expressApp.use('/api/activities', authenticate, activityRouter)
