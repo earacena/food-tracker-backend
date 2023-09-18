@@ -5,8 +5,7 @@ export const zFoodItem = z.object({
   foodName: z.string(),
   userId: z.string().uuid(),
   caloriesPerServing: z.number(),
-  servingSizeInGrams: z.number().nullable(),
-  servingSizeInUnits: z.number().nullable(),
+  servingSizeInGrams: z.number(),
   searchVisibility: z.enum(['private', 'public']),
   createdAt: z.coerce.date()
 })
@@ -17,15 +16,13 @@ export const zFoodItemDetails = z.object({
   foodName: z.string(),
   userId: z.string().uuid(),
   caloriesPerServing: z.number(),
-  servingSizeInGrams: z.number().nullable(),
-  servingSizeInUnits: z.number().nullable(),
+  servingSizeInGrams: z.number(),
   searchVisibility: z.enum(['private', 'public'])
 })
 
 export const zFoodItemUpdatableFields = z.object({
   foodName: z.string(),
   caloriesPerServing: z.number(),
-  servingSizeInGrams: z.number().nullable(),
-  servingSizeInUnits: z.number().nullable(),
+  servingSizeInGrams: z.number(),
   searchVisibility: z.enum(['private', 'public'])
 })

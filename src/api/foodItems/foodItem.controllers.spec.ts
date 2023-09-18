@@ -22,8 +22,7 @@ describe('FoodItem API', () => {
       .addColumn('foodName', 'text', (cb) => cb.notNull())
       .addColumn('userId', 'uuid', (cb) => cb.notNull())
       .addColumn('caloriesPerServing', 'integer', (cb) => cb.notNull())
-      .addColumn('servingSizeInGrams', 'integer')
-      .addColumn('servingSizeInUnits', 'integer')
+      .addColumn('servingSizeInGrams', 'integer', (cb) => cb.notNull())
       .addColumn('searchVisibility', 'varchar(10)', (cb) => cb.notNull())
       .addColumn('createdAt', 'timestamp', (cb) =>
         cb.notNull().defaultTo(currentTimestamp) // Sqlite3 specific timestamp
@@ -49,7 +48,7 @@ describe('FoodItem API', () => {
         foodName: 'Banana',
         userId: userId2,
         caloriesPerServing: 1000,
-        servingSizeInUnits: 1,
+        servingSizeInGrams: 50,
         createdAt: currentTimestamp,
         searchVisibility: 'public'
       })
@@ -72,7 +71,6 @@ describe('FoodItem API', () => {
             userId: userId1,
             caloriesPerServing: 100,
             servingSizeInGrams: 150,
-            servingSizeInUnits: null,
             createdAt: currentTimestamp,
             searchVisibility: 'private'
           }
@@ -95,8 +93,7 @@ describe('FoodItem API', () => {
               foodName: 'Banana',
               userId: userId2,
               caloriesPerServing: 1000,
-              servingSizeInGrams: null,
-              servingSizeInUnits: 1,
+              servingSizeInGrams: 50,
               createdAt: currentTimestamp,
               searchVisibility: 'public'
             }
@@ -126,8 +123,7 @@ describe('FoodItem API', () => {
           foodName: 'Super Apple',
           userId: userId2,
           caloriesPerServing: 2000,
-          servingSizeInUnits: 3,
-          servingSizeInGrams: null,
+          servingSizeInGrams: 100,
           createdAt: currentTimestamp,
           searchVisibility: 'private'
         })
@@ -142,8 +138,7 @@ describe('FoodItem API', () => {
             foodName: 'Super Apple',
             userId: userId2,
             caloriesPerServing: 2000,
-            servingSizeInGrams: null,
-            servingSizeInUnits: 3,
+            servingSizeInGrams: 100,
             createdAt: currentTimestamp,
             searchVisibility: 'private'
           }
@@ -159,8 +154,7 @@ describe('FoodItem API', () => {
         .send({
           foodName: 'Good Apple',
           caloriesPerServing: 200,
-          servingSizeInGrams: null,
-          servingSizeInUnits: 1,
+          servingSizeInGrams: 10,
           searchVisibility: 'public'
         })
         .expect(200)
@@ -174,8 +168,7 @@ describe('FoodItem API', () => {
             foodName: 'Good Apple',
             userId: userId1,
             caloriesPerServing: 200,
-            servingSizeInGrams: null,
-            servingSizeInUnits: 1,
+            servingSizeInGrams: 10,
             createdAt: currentTimestamp,
             searchVisibility: 'public'
           }
