@@ -10,6 +10,9 @@ export const zMealEntry = z.object({
 
 export const zMealEntries = z.array(zMealEntry)
 
+export type MealEntry = z.infer<typeof zMealEntry>
+export type MealEntries = z.infer<typeof zMealEntries>
+
 export const zMealIdParams = z.object({
   mealId: z.coerce.number()
 })
