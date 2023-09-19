@@ -95,6 +95,20 @@ describe('MealEntry Repository', () => {
     ])
   })
 
+  test('should return a user\'s meal entries', async () => {
+    const userMealEntries = zMealEntries.parse(await MealEntryRepository.findMealEntriesByUserId(userId2))
+
+    expect(userMealEntries).toStrictEqual([
+      {
+        id: 3,
+        userId: userId2,
+        foodItemId: 1,
+        mealId: 2,
+        quantity: 2
+      }
+    ])
+  })
+
   test('should create a meal entry and return it', async () => {
     const newMealEntry = zMealEntry.parse(await MealEntryRepository.createMealEntry({
       userId: userId1,

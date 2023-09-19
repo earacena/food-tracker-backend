@@ -109,6 +109,29 @@ describe('MealEntry API', () => {
         }
       })
     })
+
+    test('should return meal entries with given userId', async () => {
+      const response = await api
+        .get(`/api/mealEntries/user/${userId2}`)
+        .expect(200)
+
+      const responseData = JSON.parse(response.text)
+      expect(responseData).toStrictEqual({
+        success: true,
+        data: {
+          userMealEntries: [
+            {
+              id: 3,
+              userId: userId2,
+              foodItemId: 1,
+              mealId: 2,
+              quantity: 2
+            }
+          ]
+        }
+      }
+      )
+    })
   })
 
   describe('when creating mealEntry', () => {
