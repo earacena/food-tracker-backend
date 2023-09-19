@@ -5,7 +5,7 @@ import type {
 } from 'express'
 import { zMealEntries, zMealEntry, zMealEntryDetails, zMealIdParams } from './mealEntry.types'
 import MealEntryRepository from './mealEntry.repository'
-import { zIdParams } from '../../common.types'
+import { zIdParams, zUserIdParams } from '../../common.types'
 
 export async function getMealEntryByIdController (req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
@@ -34,6 +34,23 @@ export async function getMealEntriesByMealIdController (req: Request, res: Respo
         success: true,
         data: {
           mealEntries
+        }
+      })
+  } catch (err: unknown) {
+    next(err)
+  }
+}
+
+export async function getMealEntriesByUserIdController (req: Request, res: Response, next: NextFunction): Promise<void> {
+  try {
+    const { userId } = zUserIdParams.parse(req.params)
+    const userMealEntries = zMealEntries.parse(await MealEntryRepository.findMealEntriesByUserId(userId))
+
+    res.status(200)
+      .json({
+        success: true,
+        data: {
+          userMealEntries
         }
       })
   } catch (err: unknown) {

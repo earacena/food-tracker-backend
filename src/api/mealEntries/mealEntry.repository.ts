@@ -1,6 +1,7 @@
 import { db } from '../../utils/db'
 import { MealEntryNotFoundError } from '../../utils/errors'
 import { type NewMealEntry, type MealEntry } from './mealEntry.model'
+import { type MealEntries } from './mealEntry.types'
 
 export async function findMealEntryById (id: number): Promise<MealEntry> {
   return await db.selectFrom('mealEntry')
@@ -9,9 +10,16 @@ export async function findMealEntryById (id: number): Promise<MealEntry> {
     .executeTakeFirstOrThrow(() => new MealEntryNotFoundError('mealEntry not found'))
 }
 
-export async function findAllMealEntriesByMealId (mealId: number): Promise<MealEntry[]> {
+export async function findAllMealEntriesByMealId (mealId: number): Promise<MealEntries> {
   return await db.selectFrom('mealEntry')
     .where('mealId', '=', mealId)
+    .selectAll()
+    .execute()
+}
+
+export async function findMealEntriesByUserId (userId: string): Promise<MealEntries> {
+  return await db.selectFrom('mealEntry')
+    .where('userId', '=', userId)
     .selectAll()
     .execute()
 }
@@ -31,8 +39,9 @@ export async function deleteMealEntry (id: number): Promise<void> {
 }
 
 export default {
-  findAllMealEntriesByMealId,
   findMealEntryById,
+  findAllMealEntriesByMealId,
+  findMealEntriesByUserId,
   createMealEntry,
   deleteMealEntry
 }
