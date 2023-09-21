@@ -5,7 +5,8 @@ export const zActivity = z.object({
   userId: z.string().uuid(),
   foodItemId: z.number().nullable(),
   mealId: z.number().nullable(),
-  quantity: z.number(),
+  quantityInGrams: z.number().nullable(),
+  quantityInUnits: z.number().nullable(),
   createdAt: z.coerce.date()
 })
 
@@ -15,5 +16,6 @@ export const zActivityDetails = z.object({
   userId: z.string().uuid(),
   foodItemId: z.number().nullable(),
   mealId: z.number().nullable(),
-  quantity: z.number()
+  quantityInGrams: z.number().nullable(),
+  quantityInUnits: z.number().nullable()
 })

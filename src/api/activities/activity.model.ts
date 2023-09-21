@@ -5,7 +5,8 @@ export interface ActivityTable {
   userId: string
   mealId: number | null
   foodItemId: number | null
-  quantity: number
+  quantityInGrams: number | null
+  quantityInUnits: number | null
   createdAt: ColumnType<Date, string | undefined, never>
 }
 

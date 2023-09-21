@@ -37,6 +37,7 @@ CREATE TABLE "activity" (
   "userId" uuid,
   "mealId" INTEGER,
   "foodItemId" INTEGER,
-  "quantity" INTEGER,
+  "quantityInGrams" INTEGER,
+  "quantityInUnits" INTEGER,
   "createdAt" timestamptz DEFAULT CURRENT_TIMESTAMP
 );

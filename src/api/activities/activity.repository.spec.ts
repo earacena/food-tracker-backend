@@ -16,7 +16,8 @@ describe('Activity Repository', () => {
       .addColumn('userId', 'uuid', (cb) => cb.notNull())
       .addColumn('mealId', 'integer')
       .addColumn('foodItemId', 'integer')
-      .addColumn('quantity', 'integer', (cb) => cb.notNull())
+      .addColumn('quantityInGrams', 'integer')
+      .addColumn('quantityInUnits', 'integer')
       .addColumn('createdAt', 'timestamp', (cb) => cb.notNull().defaultTo(currentTimestamp))
       .execute()
 
@@ -25,7 +26,7 @@ describe('Activity Repository', () => {
       .values({
         userId: userId1,
         foodItemId: 1,
-        quantity: 2
+        quantityInGrams: 20
       })
       .execute()
 
@@ -33,7 +34,7 @@ describe('Activity Repository', () => {
       .values({
         userId: userId1,
         mealId: 2,
-        quantity: 2
+        quantityInUnits: 1
       })
       .execute()
 
@@ -41,7 +42,7 @@ describe('Activity Repository', () => {
       .values({
         userId: userId2,
         foodItemId: 2,
-        quantity: 3
+        quantityInGrams: 30
       })
       .execute()
   })
@@ -60,7 +61,8 @@ describe('Activity Repository', () => {
       userId: userId1,
       foodItemId: 1,
       mealId: null,
-      quantity: 2,
+      quantityInGrams: 20,
+      quantityInUnits: null,
       createdAt: currentTimestamp
     })
   })
@@ -74,7 +76,8 @@ describe('Activity Repository', () => {
         userId: userId1,
         foodItemId: 1,
         mealId: null,
-        quantity: 2,
+        quantityInGrams: 20,
+        quantityInUnits: null,
         createdAt: currentTimestamp
       },
       {
@@ -82,7 +85,8 @@ describe('Activity Repository', () => {
         userId: userId1,
         mealId: 2,
         foodItemId: null,
-        quantity: 2,
+        quantityInGrams: null,
+        quantityInUnits: 1,
         createdAt: currentTimestamp
       }
     ])
@@ -92,7 +96,7 @@ describe('Activity Repository', () => {
     const newActivity = zActivity.parse(await ActivityRepository.createActivity({
       userId: userId1,
       foodItemId: 10,
-      quantity: 10
+      quantityInGrams: 100
     }))
 
     expect(newActivity).toStrictEqual({
@@ -100,7 +104,8 @@ describe('Activity Repository', () => {
       userId: userId1,
       foodItemId: 10,
       mealId: null,
-      quantity: 10,
+      quantityInGrams: 100,
+      quantityInUnits: null,
       createdAt: currentTimestamp
     })
   })

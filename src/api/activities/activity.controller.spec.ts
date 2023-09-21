@@ -22,7 +22,8 @@ describe('Activity API', () => {
       .addColumn('userId', 'uuid', (cb) => cb.notNull())
       .addColumn('foodItemId', 'integer')
       .addColumn('mealId', 'integer')
-      .addColumn('quantity', 'integer', (cb) => cb.notNull())
+      .addColumn('quantityInGrams', 'integer')
+      .addColumn('quantityInUnits', 'integer')
       .addColumn('createdAt', 'timestamp', (cb) =>
         cb.notNull().defaultTo(currentTimestamp) // Sqlite3 specific timestamp
       )
@@ -31,23 +32,27 @@ describe('Activity API', () => {
     // Add test data
     await db.insertInto('activity')
       .values({
-        id: 1,
         userId: userId1,
         foodItemId: 1,
-        quantity: 3,
-        createdAt: currentTimestamp
+        quantityInGrams: 20
       })
-      .executeTakeFirst()
+      .execute()
 
     await db.insertInto('activity')
       .values({
-        id: 2,
-        userId: userId2,
-        mealId: 1,
-        quantity: 1,
-        createdAt: currentTimestamp
+        userId: userId1,
+        mealId: 2,
+        quantityInUnits: 1
       })
-      .executeTakeFirst()
+      .execute()
+
+    await db.insertInto('activity')
+      .values({
+        userId: userId2,
+        foodItemId: 2,
+        quantityInGrams: 30
+      })
+      .execute()
   })
 
   describe('when retrieving activities', () => {
@@ -65,7 +70,8 @@ describe('Activity API', () => {
             userId: userId1,
             foodItemId: 1,
             mealId: null,
-            quantity: 3,
+            quantityInGrams: 20,
+            quantityInUnits: null,
             createdAt: currentTimestamp
           }
         }
@@ -83,11 +89,12 @@ describe('Activity API', () => {
         data: {
           userActivities: [
             {
-              id: 2,
+              id: 3,
               userId: userId2,
-              foodItemId: null,
-              mealId: 1,
-              quantity: 1,
+              foodItemId: 2,
+              mealId: null,
+              quantityInGrams: 30,
+              quantityInUnits: null,
               createdAt: currentTimestamp
             }
           ]
@@ -116,8 +123,8 @@ describe('Activity API', () => {
           userId: userId2,
           foodItemId: 10,
           mealId: null,
-          quantity: 2,
-          createdAt: currentTimestamp
+          quantityInGrams: 200,
+          quantityInUnits: null
         })
         .expect(201)
 
@@ -126,11 +133,12 @@ describe('Activity API', () => {
         success: true,
         data: {
           newActivity: {
-            id: 3,
+            id: 4,
             userId: userId2,
             foodItemId: 10,
             mealId: null,
-            quantity: 2,
+            quantityInGrams: 200,
+            quantityInUnits: null,
             createdAt: currentTimestamp
           }
         }
