@@ -4,8 +4,7 @@ import type {
   NextFunction,
   ErrorRequestHandler
 } from 'express'
-import { AuthenticationError } from '../utils/errors'
-import NotFoundError from '../utils/errors/NotFoundError'
+import { ApiError } from '../utils/errors'
 
 const errorHandler: ErrorRequestHandler = (
   err: any,
@@ -13,24 +12,11 @@ const errorHandler: ErrorRequestHandler = (
   res: Response,
   next: NextFunction
 ): void => {
-  if (err instanceof NotFoundError) {
+  if ('respond' in err) {
     res = err.respond(res)
-  } else if (err instanceof AuthenticationError) {
-    res
-      .status(401)
-      .json({
-        success: false,
-        errorMessage: err.message
-      })
   } else {
-    res
-      .status(500)
-      .json({
-        success: false,
-        errorMessage: 'internal server error'
-      })
+    res = new ApiError(err.message).respond(res)
   }
-
   next()
 }
 
