@@ -1,6 +1,6 @@
 import { type NextFunction, type Request, type Response } from 'express'
 import { KEYCLOAK_PUBLIC_KEY } from '../config'
-import Jwt from 'jsonwebtoken'
+import Jwt, { TokenExpiredError } from 'jsonwebtoken'
 import AuthenticationError from '../utils/errors/AuthenticationError'
 import { z } from 'zod'
 
@@ -24,16 +24,21 @@ function decodeJwt (token: string): string | Jwt.JwtPayload {
 }
 
 function authenticate (req: Request, _res: Response, next: NextFunction): void {
-  const token = extractJwt(req)
-  if (token != null) {
-    const decodedToken = decodeJwt(token)
-    req.body.token = decodedToken
-    next()
+  try {
+    const token = extractJwt(req)
+    if (token != null) {
+      const decodedToken = decodeJwt(token)
+      req.body.token = decodedToken
+      next()
+    }
+  } catch (err: unknown) {
+    if (err instanceof TokenExpiredError) {
+      next(new AuthenticationError('jwt expired'))
+      return
+    }
 
-    return
+    next(new AuthenticationError('must be authenticated to do this'))
   }
-
-  next(new AuthenticationError('must be authenticated to do this'))
 }
 
 export default authenticate
