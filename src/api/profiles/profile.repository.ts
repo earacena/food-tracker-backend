@@ -1,12 +1,12 @@
 import { db } from '../../utils/db'
-import { ProfileNotFoundError } from '../../utils/errors'
+import { NotFoundError } from '../../utils/errors'
 import { type ProfileUpdate, type NewProfile, type Profile } from './profile.model'
 
 export async function findProfileByUserId (userId: string): Promise<Profile> {
   return await db.selectFrom('profile')
     .where('userId', '=', userId)
     .selectAll()
-    .executeTakeFirstOrThrow(() => new ProfileNotFoundError('profile does not exist'))
+    .executeTakeFirstOrThrow(() => new NotFoundError('profile'))
 }
 
 export async function createProfile (profile: NewProfile): Promise<Profile> {

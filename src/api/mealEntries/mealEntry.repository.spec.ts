@@ -2,7 +2,7 @@ import { randomUUID } from 'crypto'
 import { db } from '../../utils/db'
 import MealEntryRepository from './mealEntry.repository'
 import { zMealEntries, zMealEntry } from './mealEntry.types'
-import { MealEntryNotFoundError } from '../../utils/errors'
+import { NotFoundError } from '../../utils/errors'
 
 describe('MealEntry Repository', () => {
   const userId1 = randomUUID()
@@ -70,7 +70,7 @@ describe('MealEntry Repository', () => {
       await MealEntryRepository.findMealEntryById(1111)
       throw new Error()
     } catch (err: unknown) {
-      expect(err).toBeInstanceOf(MealEntryNotFoundError)
+      expect(err).toBeInstanceOf(NotFoundError)
     }
   })
 
@@ -133,7 +133,7 @@ describe('MealEntry Repository', () => {
       await MealEntryRepository.findMealEntryById(1)
       throw new Error()
     } catch (err: unknown) {
-      expect(err).toBeInstanceOf(MealEntryNotFoundError)
+      expect(err).toBeInstanceOf(NotFoundError)
     }
   })
 })

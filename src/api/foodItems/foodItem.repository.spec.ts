@@ -2,7 +2,7 @@ import { randomUUID } from 'crypto'
 import { db } from '../../utils/db'
 import FoodItemRepository from './foodItem.repository'
 import { zFoodItem, zFoodItems } from './foodItem.types'
-import { FoodItemNotFoundError } from '../../utils/errors'
+import { NotFoundError } from '../../utils/errors'
 
 describe('FoodItem Repository', () => {
   const currentTimestamp = new Date()
@@ -80,7 +80,7 @@ describe('FoodItem Repository', () => {
       await FoodItemRepository.findFoodItemById(222)
       throw new Error() // fails test if expected error is not thrown
     } catch (err: unknown) {
-      expect(err).toBeInstanceOf(FoodItemNotFoundError)
+      expect(err).toBeInstanceOf(NotFoundError)
     }
   })
 
@@ -150,7 +150,7 @@ describe('FoodItem Repository', () => {
       await FoodItemRepository.findFoodItemById(1)
       throw new Error() // fails test if expected error was not thrown
     } catch (err: unknown) {
-      expect(err).toBeInstanceOf(FoodItemNotFoundError)
+      expect(err).toBeInstanceOf(NotFoundError)
     }
   })
 })

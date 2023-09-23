@@ -1,5 +1,5 @@
 import { db } from '../../utils/db'
-import { ActivityNotFoundError } from '../../utils/errors'
+import { NotFoundError } from '../../utils/errors'
 import ActivityRepository from './activity.repository'
 import { zActivities, zActivity } from './activity.types'
 import { randomUUID } from 'crypto'
@@ -117,7 +117,7 @@ describe('Activity Repository', () => {
       await ActivityRepository.findActivityById(1)
       throw new Error()
     } catch (err: unknown) {
-      expect(err).toBeInstanceOf(ActivityNotFoundError)
+      expect(err).toBeInstanceOf(NotFoundError)
     }
   })
 })

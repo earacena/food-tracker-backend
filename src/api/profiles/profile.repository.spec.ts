@@ -1,8 +1,8 @@
 import { randomUUID } from 'crypto'
 import { db } from '../../utils/db'
 import { zProfile } from './profile.types'
-import { ProfileNotFoundError } from '../../utils/errors'
 import ProfileRepository from './profile.repository'
+import { NotFoundError } from '../../utils/errors'
 
 describe('Profile Repository', () => {
   const currentTimestamp = new Date()
@@ -53,7 +53,7 @@ describe('Profile Repository', () => {
       await ProfileRepository.findProfileByUserId(crypto.randomUUID())
       throw new Error() // fails test if expected error is not thrown
     } catch (err: unknown) {
-      expect(err).toBeInstanceOf(ProfileNotFoundError)
+      expect(err).toBeInstanceOf(NotFoundError)
     }
   })
 
@@ -88,7 +88,7 @@ describe('Profile Repository', () => {
       await ProfileRepository.findProfileByUserId(userId1)
       throw new Error() // fails test if expected error is not thrown
     } catch (err: unknown) {
-      expect(err).toBeInstanceOf(ProfileNotFoundError)
+      expect(err).toBeInstanceOf(NotFoundError)
     }
   })
 })

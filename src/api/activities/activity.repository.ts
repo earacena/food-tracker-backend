@@ -1,12 +1,12 @@
 import { db } from '../../utils/db'
-import { ActivityNotFoundError } from '../../utils/errors'
+import { NotFoundError } from '../../utils/errors'
 import { type NewActivity, type Activity } from './activity.model'
 
 export async function findActivityById (id: number): Promise<Activity> {
   return await db.selectFrom('activity')
     .where('id', '=', id)
     .selectAll()
-    .executeTakeFirstOrThrow(() => new ActivityNotFoundError('activity not found'))
+    .executeTakeFirstOrThrow(() => new NotFoundError('activity'))
 }
 
 export async function findActivitiesByUserId (userId: string): Promise<Activity[]> {

@@ -81,7 +81,7 @@ describe('Profile API', () => {
       const responseData = JSON.parse(response.text)
       expect(responseData).toStrictEqual({
         success: false,
-        errorMessage: 'profile does not exist'
+        errorMessage: 'profile not found'
       })
     })
   })
@@ -148,7 +148,7 @@ describe('Profile API', () => {
       const responseData = JSON.parse(response.text)
       expect(responseData).toStrictEqual({
         success: false,
-        errorMessage: 'profile does not exist'
+        errorMessage: 'profile not found'
       })
     })
   })

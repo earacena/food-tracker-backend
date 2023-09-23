@@ -1,5 +1,5 @@
 import { db } from '../../utils/db'
-import { MealEntryNotFoundError } from '../../utils/errors'
+import { NotFoundError } from '../../utils/errors'
 import { type NewMealEntry, type MealEntry } from './mealEntry.model'
 import { type MealEntries } from './mealEntry.types'
 
@@ -7,7 +7,7 @@ export async function findMealEntryById (id: number): Promise<MealEntry> {
   return await db.selectFrom('mealEntry')
     .where('id', '=', id)
     .selectAll()
-    .executeTakeFirstOrThrow(() => new MealEntryNotFoundError('mealEntry not found'))
+    .executeTakeFirstOrThrow(() => new NotFoundError('mealEntry'))
 }
 
 export async function findAllMealEntriesByMealId (mealId: number): Promise<MealEntries> {

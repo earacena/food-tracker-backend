@@ -4,9 +4,8 @@ import type {
   NextFunction,
   ErrorRequestHandler
 } from 'express'
-import { NoResultError } from 'kysely'
-import FoodItemNotFoundError from '../utils/errors/FoodItemNotFoundError'
-import { ActivityNotFoundError, AuthenticationError, MealEntryNotFoundError, MealNotFoundError, ProfileNotFoundError } from '../utils/errors'
+import { AuthenticationError } from '../utils/errors'
+import NotFoundError from '../utils/errors/NotFoundError'
 
 const errorHandler: ErrorRequestHandler = (
   err: any,
@@ -14,19 +13,8 @@ const errorHandler: ErrorRequestHandler = (
   res: Response,
   next: NextFunction
 ): void => {
-  if (err instanceof NoResultError) {
-    res
-      .status(404)
-      .json({
-        success: false
-      })
-  } else if (err instanceof FoodItemNotFoundError || err instanceof MealEntryNotFoundError || err instanceof MealNotFoundError || err instanceof ActivityNotFoundError || err instanceof ProfileNotFoundError) {
-    res
-      .status(404)
-      .json({
-        success: false,
-        errorMessage: err.message
-      })
+  if (err instanceof NotFoundError) {
+    res = err.respond(res)
   } else if (err instanceof AuthenticationError) {
     res
       .status(401)
