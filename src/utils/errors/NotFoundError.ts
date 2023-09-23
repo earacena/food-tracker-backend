@@ -1,6 +1,7 @@
 import { type Response } from 'express'
+import ApiError from './ApiError'
 
-class NotFoundError extends Error {
+class NotFoundError extends ApiError {
   resourceName
 
   constructor (resourceName: string) {
@@ -8,7 +9,7 @@ class NotFoundError extends Error {
     this.resourceName = resourceName
   }
 
-  respond (res: Response): Response {
+  override respond (res: Response): Response {
     return res
       .status(404)
       .json({
