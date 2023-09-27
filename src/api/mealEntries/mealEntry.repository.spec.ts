@@ -136,4 +136,11 @@ describe('MealEntry Repository', () => {
       expect(err).toBeInstanceOf(NotFoundError)
     }
   })
+
+  test('should delete meal entries with given meal id', async () => {
+    await MealEntryRepository.deleteMealEntriesByMealId(2)
+
+    const mealEntries = await MealEntryRepository.findAllMealEntriesByMealId(2)
+    expect(mealEntries).toStrictEqual([])
+  })
 })
