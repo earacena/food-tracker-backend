@@ -178,5 +178,23 @@ describe('MealEntry API', () => {
         errorMessage: 'mealEntry not found'
       })
     })
+
+    test('should delete meal entries with given meal id', async () => {
+      await api
+        .delete('/api/mealEntries/meal/2')
+        .expect(204)
+
+      const response = await api
+        .get('/api/mealEntries/meal/2')
+        .expect(200)
+
+      const responseData = JSON.parse(response.text)
+      expect(responseData).toStrictEqual({
+        success: true,
+        data: {
+          mealEntries: []
+        }
+      })
+    })
   })
 })
