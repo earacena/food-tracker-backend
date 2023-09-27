@@ -4,7 +4,6 @@ import type {
   NextFunction,
   ErrorRequestHandler
 } from 'express'
-import { ApiError } from '../utils/errors'
 
 const errorHandler: ErrorRequestHandler = (
   err: any,
@@ -12,11 +11,7 @@ const errorHandler: ErrorRequestHandler = (
   res: Response,
   next: NextFunction
 ): void => {
-  if ('respond' in err) {
-    res = err.respond(res)
-  } else {
-    res = new ApiError(err.message).respond(res)
-  }
+  res = err.respond(res)
   next()
 }
 
