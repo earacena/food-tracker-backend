@@ -38,10 +38,18 @@ export async function deleteMealEntry (id: number): Promise<void> {
     .executeTakeFirst()
 }
 
+export async function deleteMealEntriesByMealId (mealId: number): Promise<void> {
+  await db.deleteFrom('mealEntry')
+    .where('mealId', '=', mealId)
+    .returningAll()
+    .execute()
+}
+
 export default {
   findMealEntryById,
   findAllMealEntriesByMealId,
   findMealEntriesByUserId,
   createMealEntry,
-  deleteMealEntry
+  deleteMealEntry,
+  deleteMealEntriesByMealId
 }

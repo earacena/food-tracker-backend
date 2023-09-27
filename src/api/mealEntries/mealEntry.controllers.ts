@@ -88,3 +88,17 @@ export async function deleteMealEntryController (req: Request, res: Response, ne
     next(err)
   }
 }
+
+export async function deleteMealEntriesByMealIdController (req: Request, res: Response, next: NextFunction): Promise<void> {
+  try {
+    const { mealId } = zMealIdParams.parse(req.params)
+    await MealEntryRepository.deleteMealEntriesByMealId(mealId)
+
+    res.status(204)
+      .json({
+        success: true
+      })
+  } catch (err: unknown) {
+    next(err)
+  }
+}
