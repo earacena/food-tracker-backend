@@ -1,5 +1,5 @@
 import express from 'express'
-import { PORT } from './config'
+import { NODE_ENV, PORT } from './config'
 import foodItemRouter from './api/foodItems/foodItem.routes'
 import errorHandler from './middleware/errorHandler.middleware'
 import mealRouter from './api/meals/meal.routes'
@@ -7,12 +7,18 @@ import mealEntryRouter from './api/mealEntries/mealEntry.routes'
 import authenticate from './middleware/authenticate'
 import profileRouter from './api/profiles/profile.routes'
 import activityRouter from './api/activities/activity.routes'
+import morgan from 'morgan'
 
 const expressApp = express()
 
 // Pre-route middleware
 expressApp.use(express.json())
 expressApp.use(express.urlencoded({ extended: true }))
+
+// Disable logging when running tests
+if (NODE_ENV !== 'test') {
+  expressApp.use(morgan('dev'))
+}
 
 // Routes
 expressApp.use('/api/activities', authenticate, activityRouter)
