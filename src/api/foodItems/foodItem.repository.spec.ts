@@ -15,7 +15,8 @@ describe('FoodItem Repository', () => {
       .addColumn('foodName', 'text', (cb) => cb.notNull())
       .addColumn('userId', 'uuid', (cb) => cb.notNull())
       .addColumn('caloriesPerServing', 'integer', (cb) => cb.notNull())
-      .addColumn('servingSizeInGrams', 'integer', (cb) => cb.notNull())
+      .addColumn('servingSizeInGrams', 'integer')
+      .addColumn('servingSizeInUnits', 'integer')
       .addColumn('searchVisibility', 'varchar(10)', (cb) => cb.notNull())
       .addColumn('createdAt', 'timestamp', (cb) =>
         cb.notNull().defaultTo(currentTimestamp)
@@ -30,6 +31,7 @@ describe('FoodItem Repository', () => {
         userId: userId1,
         caloriesPerServing: 100,
         servingSizeInGrams: 150,
+        servingSizeInUnits: null,
         searchVisibility: 'private'
       })
       .executeTakeFirst()
@@ -41,6 +43,7 @@ describe('FoodItem Repository', () => {
         userId: userId2,
         caloriesPerServing: 1000,
         servingSizeInGrams: 0,
+        servingSizeInUnits: null,
         searchVisibility: 'public'
       })
       .executeTakeFirst()
@@ -50,8 +53,21 @@ describe('FoodItem Repository', () => {
         id: 3,
         foodName: 'Pear',
         userId: userId1,
-        caloriesPerServing: 10,
-        servingSizeInGrams: 0,
+        caloriesPerServing: 100,
+        servingSizeInGrams: null,
+        servingSizeInUnits: 1,
+        searchVisibility: 'private'
+      })
+      .executeTakeFirst()
+
+    await db.insertInto('foodItem')
+      .values({
+        id: 4,
+        foodName: 'Egg',
+        userId: userId2,
+        caloriesPerServing: 80,
+        servingSizeInGrams: null,
+        servingSizeInUnits: 1,
         searchVisibility: 'private'
       })
       .executeTakeFirst()
@@ -70,6 +86,7 @@ describe('FoodItem Repository', () => {
       userId: userId1,
       caloriesPerServing: 100,
       servingSizeInGrams: 150,
+      servingSizeInUnits: null,
       createdAt: currentTimestamp,
       searchVisibility: 'private'
     })
@@ -94,6 +111,7 @@ describe('FoodItem Repository', () => {
         userId: userId1,
         caloriesPerServing: 100,
         servingSizeInGrams: 150,
+        servingSizeInUnits: null,
         createdAt: currentTimestamp,
         searchVisibility: 'private'
       },
@@ -101,8 +119,9 @@ describe('FoodItem Repository', () => {
         id: 3,
         foodName: 'Pear',
         userId: userId1,
-        caloriesPerServing: 10,
-        servingSizeInGrams: 0,
+        caloriesPerServing: 100,
+        servingSizeInGrams: null,
+        servingSizeInUnits: 1,
         createdAt: currentTimestamp,
         searchVisibility: 'private'
       }
@@ -118,6 +137,7 @@ describe('FoodItem Repository', () => {
       userId: userId1,
       caloriesPerServing: 100,
       servingSizeInGrams: 150,
+      servingSizeInUnits: null,
       createdAt: currentTimestamp,
       searchVisibility: 'private'
     })
@@ -129,15 +149,17 @@ describe('FoodItem Repository', () => {
       userId: userId1,
       caloriesPerServing: 150,
       servingSizeInGrams: 50,
+      servingSizeInUnits: null,
       searchVisibility: 'public'
     }))
 
     expect(newFoodItem).toStrictEqual({
-      id: 4,
+      id: 5,
       foodName: 'New Apple',
       userId: userId1,
       caloriesPerServing: 150,
       servingSizeInGrams: 50,
+      servingSizeInUnits: null,
       createdAt: currentTimestamp,
       searchVisibility: 'public'
     })

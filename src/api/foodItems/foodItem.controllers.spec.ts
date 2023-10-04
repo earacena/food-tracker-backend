@@ -22,7 +22,8 @@ describe('FoodItem API', () => {
       .addColumn('foodName', 'text', (cb) => cb.notNull())
       .addColumn('userId', 'uuid', (cb) => cb.notNull())
       .addColumn('caloriesPerServing', 'integer', (cb) => cb.notNull())
-      .addColumn('servingSizeInGrams', 'integer', (cb) => cb.notNull())
+      .addColumn('servingSizeInGrams', 'integer')
+      .addColumn('servingSizeInUnits', 'integer')
       .addColumn('searchVisibility', 'varchar(10)', (cb) => cb.notNull())
       .addColumn('createdAt', 'timestamp', (cb) =>
         cb.notNull().defaultTo(currentTimestamp) // Sqlite3 specific timestamp
@@ -37,6 +38,7 @@ describe('FoodItem API', () => {
         userId: userId1,
         caloriesPerServing: 100,
         servingSizeInGrams: 150,
+        servingSizeInUnits: null,
         createdAt: currentTimestamp,
         searchVisibility: 'private'
       })
@@ -49,6 +51,20 @@ describe('FoodItem API', () => {
         userId: userId2,
         caloriesPerServing: 1000,
         servingSizeInGrams: 50,
+        servingSizeInUnits: null,
+        createdAt: currentTimestamp,
+        searchVisibility: 'public'
+      })
+      .executeTakeFirst()
+
+    await db.insertInto('foodItem')
+      .values({
+        id: 3,
+        foodName: 'Egg',
+        userId: userId2,
+        caloriesPerServing: 1000,
+        servingSizeInGrams: null,
+        servingSizeInUnits: 1,
         createdAt: currentTimestamp,
         searchVisibility: 'public'
       })
@@ -71,6 +87,7 @@ describe('FoodItem API', () => {
             userId: userId1,
             caloriesPerServing: 100,
             servingSizeInGrams: 150,
+            servingSizeInUnits: null,
             createdAt: currentTimestamp,
             searchVisibility: 'private'
           }
@@ -94,6 +111,17 @@ describe('FoodItem API', () => {
               userId: userId2,
               caloriesPerServing: 1000,
               servingSizeInGrams: 50,
+              servingSizeInUnits: null,
+              createdAt: currentTimestamp,
+              searchVisibility: 'public'
+            },
+            {
+              id: 3,
+              foodName: 'Egg',
+              userId: userId2,
+              caloriesPerServing: 1000,
+              servingSizeInGrams: null,
+              servingSizeInUnits: 1,
               createdAt: currentTimestamp,
               searchVisibility: 'public'
             }
@@ -124,6 +152,7 @@ describe('FoodItem API', () => {
           userId: userId2,
           caloriesPerServing: 2000,
           servingSizeInGrams: 100,
+          servingSizeInUnits: null,
           createdAt: currentTimestamp,
           searchVisibility: 'private'
         })
@@ -134,11 +163,12 @@ describe('FoodItem API', () => {
         success: true,
         data: {
           newFoodItem: {
-            id: 3,
+            id: 4,
             foodName: 'Super Apple',
             userId: userId2,
             caloriesPerServing: 2000,
             servingSizeInGrams: 100,
+            servingSizeInUnits: null,
             createdAt: currentTimestamp,
             searchVisibility: 'private'
           }
@@ -154,7 +184,8 @@ describe('FoodItem API', () => {
         .send({
           foodName: 'Good Apple',
           caloriesPerServing: 200,
-          servingSizeInGrams: 10,
+          servingSizeInGrams: null,
+          servingSizeInUnits: 1,
           searchVisibility: 'public'
         })
         .expect(200)
@@ -168,7 +199,8 @@ describe('FoodItem API', () => {
             foodName: 'Good Apple',
             userId: userId1,
             caloriesPerServing: 200,
-            servingSizeInGrams: 10,
+            servingSizeInGrams: null,
+            servingSizeInUnits: 1,
             createdAt: currentTimestamp,
             searchVisibility: 'public'
           }
