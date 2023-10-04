@@ -11,7 +11,8 @@ export interface FoodItemTable {
   foodName: string
   userId: string
   caloriesPerServing: number
-  servingSizeInGrams: number
+  servingSizeInGrams: number | null
+  servingSizeInUnits: number | null
   searchVisibility: 'public' | 'private'
   createdAt: ColumnType<Date, string | undefined, never>
 };
