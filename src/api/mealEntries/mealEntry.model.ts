@@ -10,7 +10,8 @@ export interface MealEntryTable {
   userId: string
   foodItemId: number
   mealId: number
-  quantity: number
+  quantityInGrams: number | null
+  quantityInUnits: number | null
 }
 
 export type MealEntry = Selectable<MealEntryTable>

@@ -5,7 +5,8 @@ export const zMealEntry = z.object({
   userId: z.string().uuid(),
   foodItemId: z.number(),
   mealId: z.number(),
-  quantity: z.number()
+  quantityInGrams: z.number().nullable(),
+  quantityInUnits: z.number().nullable()
 })
 
 export const zMealEntries = z.array(zMealEntry)
@@ -21,5 +22,6 @@ export const zMealEntryDetails = z.object({
   userId: z.string().uuid(),
   foodItemId: z.number(),
   mealId: z.number(),
-  quantity: z.number()
+  quantityInGrams: z.number().nullable(),
+  quantityInUnits: z.number().nullable()
 })
