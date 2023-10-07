@@ -23,7 +23,8 @@ CREATE TABLE "mealEntry" (
   "userId" uuid NOT NULL,
   "mealId" INTEGER,
   "foodItemId" INTEGER,
-  "quantity" INTEGER
+  "quantityInGrams" INTEGER,
+  "quantityInUnits" INTEGER
 );
 
 CREATE TABLE "profile" (
