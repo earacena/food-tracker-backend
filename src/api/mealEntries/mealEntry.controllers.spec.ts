@@ -22,7 +22,8 @@ describe('MealEntry API', () => {
       .addColumn('userId', 'uuid', (cb) => cb.notNull())
       .addColumn('mealId', 'integer')
       .addColumn('foodItemId', 'integer')
-      .addColumn('quantity', 'integer', (cb) => cb.notNull())
+      .addColumn('quantityInGrams', 'integer')
+      .addColumn('quantityInUnits', 'integer')
       .execute()
 
     // Add test data
@@ -31,7 +32,8 @@ describe('MealEntry API', () => {
         userId: userId1,
         foodItemId: 1,
         mealId: 1,
-        quantity: 2
+        quantityInGrams: null,
+        quantityInUnits: 2
       })
       .execute()
 
@@ -40,7 +42,8 @@ describe('MealEntry API', () => {
         userId: userId1,
         foodItemId: 2,
         mealId: 1,
-        quantity: 1
+        quantityInGrams: 100,
+        quantityInUnits: null
       })
       .execute()
 
@@ -49,7 +52,8 @@ describe('MealEntry API', () => {
         userId: userId2,
         foodItemId: 1,
         mealId: 2,
-        quantity: 2
+        quantityInGrams: null,
+        quantityInUnits: 200
       })
       .execute()
   })
@@ -75,7 +79,8 @@ describe('MealEntry API', () => {
             userId: userId1,
             foodItemId: 1,
             mealId: 1,
-            quantity: 2
+            quantityInUnits: 2,
+            quantityInGrams: null
           }
         }
       })
@@ -96,14 +101,16 @@ describe('MealEntry API', () => {
               userId: userId1,
               foodItemId: 1,
               mealId: 1,
-              quantity: 2
+              quantityInGrams: null,
+              quantityInUnits: 2
             },
             {
               id: 2,
               userId: userId1,
               foodItemId: 2,
               mealId: 1,
-              quantity: 1
+              quantityInGrams: 100,
+              quantityInUnits: null
             }
           ]
         }
@@ -125,7 +132,8 @@ describe('MealEntry API', () => {
               userId: userId2,
               foodItemId: 1,
               mealId: 2,
-              quantity: 2
+              quantityInGrams: null,
+              quantityInUnits: 200
             }
           ]
         }
@@ -142,7 +150,8 @@ describe('MealEntry API', () => {
           userId: userId2,
           mealId: 3,
           foodItemId: 10,
-          quantity: 3
+          quantityInGrams: 30,
+          quantityInUnits: null
         })
         .expect(201)
 
@@ -155,7 +164,8 @@ describe('MealEntry API', () => {
             userId: userId2,
             foodItemId: 10,
             mealId: 3,
-            quantity: 3
+            quantityInGrams: 30,
+            quantityInUnits: null
           }
         }
       })

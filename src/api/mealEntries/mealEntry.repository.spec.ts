@@ -15,7 +15,8 @@ describe('MealEntry Repository', () => {
       .addColumn('userId', 'uuid', (cb) => cb.notNull())
       .addColumn('mealId', 'integer', (cb) => cb.notNull())
       .addColumn('foodItemId', 'integer', (cb) => cb.notNull())
-      .addColumn('quantity', 'integer', (cb) => cb.notNull())
+      .addColumn('quantityInGrams', 'integer')
+      .addColumn('quantityInUnits', 'integer')
       .execute()
 
     // Add test data
@@ -24,7 +25,8 @@ describe('MealEntry Repository', () => {
         userId: userId1,
         foodItemId: 1,
         mealId: 1,
-        quantity: 2
+        quantityInGrams: 2,
+        quantityInUnits: null
       })
       .execute()
 
@@ -33,7 +35,8 @@ describe('MealEntry Repository', () => {
         userId: userId1,
         foodItemId: 2,
         mealId: 1,
-        quantity: 1
+        quantityInGrams: null,
+        quantityInUnits: 1
       })
       .execute()
 
@@ -42,7 +45,8 @@ describe('MealEntry Repository', () => {
         userId: userId2,
         foodItemId: 1,
         mealId: 2,
-        quantity: 2
+        quantityInGrams: 20,
+        quantityInUnits: null
       })
       .execute()
   })
@@ -61,7 +65,8 @@ describe('MealEntry Repository', () => {
       userId: userId1,
       foodItemId: 1,
       mealId: 1,
-      quantity: 2
+      quantityInGrams: 2,
+      quantityInUnits: null
     })
   })
 
@@ -83,14 +88,16 @@ describe('MealEntry Repository', () => {
         userId: userId1,
         foodItemId: 1,
         mealId: 1,
-        quantity: 2
+        quantityInGrams: 2,
+        quantityInUnits: null
       },
       {
         id: 2,
         userId: userId1,
         foodItemId: 2,
         mealId: 1,
-        quantity: 1
+        quantityInGrams: null,
+        quantityInUnits: 1
       }
     ])
   })
@@ -104,7 +111,8 @@ describe('MealEntry Repository', () => {
         userId: userId2,
         foodItemId: 1,
         mealId: 2,
-        quantity: 2
+        quantityInGrams: 20,
+        quantityInUnits: null
       }
     ])
   })
@@ -114,7 +122,8 @@ describe('MealEntry Repository', () => {
       userId: userId1,
       foodItemId: 10,
       mealId: 10,
-      quantity: 3
+      quantityInGrams: null,
+      quantityInUnits: 10
     }))
 
     expect(newMealEntry).toStrictEqual({
@@ -122,7 +131,8 @@ describe('MealEntry Repository', () => {
       userId: userId1,
       foodItemId: 10,
       mealId: 10,
-      quantity: 3
+      quantityInGrams: null,
+      quantityInUnits: 10
     })
   })
 
