@@ -16,11 +16,24 @@ export async function findActivitiesByUserId (userId: string): Promise<Activity[
     .execute()
 }
 
+export async function findActivitiesByMealId (mealId: number): Promise<Activity[]> {
+  return await db.selectFrom('activity')
+    .where('mealId', '=', mealId)
+    .selectAll()
+    .execute()
+}
+
 export async function createActivity (activity: NewActivity): Promise<Activity> {
   return await db.insertInto('activity')
     .values(activity)
     .returningAll()
     .executeTakeFirstOrThrow()
+}
+
+export async function deleteActivitiesByMealId (mealId: number): Promise<void> {
+  await db.deleteFrom('activity')
+    .where('mealId', '=', mealId)
+    .execute()
 }
 
 export async function deleteActivity (id: number): Promise<void> {
@@ -32,6 +45,8 @@ export async function deleteActivity (id: number): Promise<void> {
 export default {
   findActivityById,
   findActivitiesByUserId,
+  findActivitiesByMealId,
   createActivity,
-  deleteActivity
+  deleteActivity,
+  deleteActivitiesByMealId
 }
