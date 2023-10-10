@@ -162,5 +162,21 @@ describe('Activity API', () => {
         errorMessage: 'activity not found'
       })
     })
+
+    test('should delete activity', async () => {
+      await api
+        .delete('/api/activities/meal/2')
+        .expect(204)
+
+      const response = await api
+        .get('/api/activities/2')
+        .expect(404)
+
+      const responseData = JSON.parse(response.text)
+      expect(responseData).toStrictEqual({
+        success: false,
+        errorMessage: 'activity not found'
+      })
+    })
   })
 })

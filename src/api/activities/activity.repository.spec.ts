@@ -92,6 +92,22 @@ describe('Activity Repository', () => {
     ])
   })
 
+  test('should return all activity by given mealId', async () => {
+    const mealActivities = zActivities.parse(await ActivityRepository.findActivitiesByMealId(2))
+
+    expect(mealActivities).toStrictEqual([
+      {
+        id: 2,
+        userId: userId1,
+        mealId: 2,
+        foodItemId: null,
+        quantityInGrams: null,
+        quantityInUnits: 1,
+        createdAt: currentTimestamp
+      }
+    ])
+  })
+
   test('should create an activity and return it', async () => {
     const newActivity = zActivity.parse(await ActivityRepository.createActivity({
       userId: userId1,
@@ -119,5 +135,12 @@ describe('Activity Repository', () => {
     } catch (err: unknown) {
       expect(err).toBeInstanceOf(NotFoundError)
     }
+  })
+
+  test('should delete all activities with given mealId', async () => {
+    await ActivityRepository.deleteActivitiesByMealId(2)
+
+    const mealActivities = await ActivityRepository.findActivitiesByMealId(2)
+    expect(mealActivities).toStrictEqual([])
   })
 })
