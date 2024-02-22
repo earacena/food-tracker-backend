@@ -1,4 +1,4 @@
-import express from 'express'
+import express, { type RequestHandler } from 'express'
 import { NODE_ENV, PORT } from './config'
 import foodItemRouter from './api/foodItems/foodItem.routes'
 import errorHandler from './middleware/errorHandler.middleware'
@@ -8,11 +8,13 @@ import authenticate from './middleware/authenticate'
 import profileRouter from './api/profiles/profile.routes'
 import activityRouter from './api/activities/activity.routes'
 import morgan from 'morgan'
-import { initializeApp } from 'firebase-admin/app'
+import { applicationDefault, initializeApp } from 'firebase-admin/app'
 
 // Initialize Firebase
 if (NODE_ENV !== 'test') {
-  initializeApp()
+  initializeApp({
+    credential: applicationDefault()
+  })
 }
 
 // Initialize Express
@@ -28,11 +30,11 @@ if (NODE_ENV !== 'test') {
 }
 
 // Routes
-expressApp.use('/api/activities', authenticate, activityRouter)
-expressApp.use('/api/foodItems', authenticate, foodItemRouter)
-expressApp.use('/api/meals', authenticate, mealRouter)
-expressApp.use('/api/mealEntries', authenticate, mealEntryRouter)
-expressApp.use('/api/profiles', authenticate, profileRouter)
+expressApp.use('/api/activities', authenticate as RequestHandler, activityRouter)
+expressApp.use('/api/foodItems', authenticate as RequestHandler, foodItemRouter)
+expressApp.use('/api/meals', authenticate as RequestHandler, mealRouter)
+expressApp.use('/api/mealEntries', authenticate as RequestHandler, mealEntryRouter)
+expressApp.use('/api/profiles', authenticate as RequestHandler, profileRouter)
 
 // Post-route middleware
 expressApp.use(errorHandler)

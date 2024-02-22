@@ -15,29 +15,20 @@ function extractJwt (req: Request): string | null {
   return token ?? null
 }
 
-async function decodeJwt (token: string): Promise<DecodedIdToken | null> {
+async function decodeJwt (token: string): Promise<DecodedIdToken> {
   // Decode token using firebase SDK
-  try {
-    const decoded = await getAuth().verifyIdToken(token)
-    return decoded
-  } catch (err: unknown) {
-    console.error(err)
-    return null
-  }
+  const decoded = await getAuth().verifyIdToken(token)
+  return decoded
 }
 
-function authenticate (req: Request, _res: Response, next: NextFunction): void {
+async function authenticate (req: Request, _res: Response, next: NextFunction): Promise<void> {
   try {
     const token = extractJwt(req)
     if (token != null) {
-      const decodedToken = decodeJwt(token)
+      const decodedToken = await decodeJwt(token)
 
-      if (decodedToken !== null) {
-        req.body.token = decodedToken
-        next()
-      } else {
-        next(new AuthenticationError('unable to verify token'))
-      }
+      req.body.token = decodedToken
+      next()
     }
   } catch (err: unknown) {
     if (err instanceof TokenExpiredError) {
@@ -45,7 +36,7 @@ function authenticate (req: Request, _res: Response, next: NextFunction): void {
       return
     }
 
-    next(new AuthenticationError('must be authenticated to do this'))
+    next(new AuthenticationError('must be authenticated to do this / unable to verify token'))
   }
 }
 
