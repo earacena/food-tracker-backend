@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 export const zActivity = z.object({
   id: z.number(),
-  userId: z.string().uuid(),
+  userId: z.string(),
   foodItemId: z.number().nullable(),
   mealId: z.number().nullable(),
   quantityInGrams: z.number().nullable(),
@@ -13,7 +13,7 @@ export const zActivity = z.object({
 export const zActivities = z.array(zActivity)
 
 export const zActivityDetails = z.object({
-  userId: z.string().uuid(),
+  userId: z.string(),
   foodItemId: z.number().nullable(),
   mealId: z.number().nullable(),
   quantityInGrams: z.number().nullable(),

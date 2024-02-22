@@ -19,7 +19,7 @@ describe('Activity API', () => {
   beforeAll(async () => {
     await db.schema.createTable('activity')
       .addColumn('id', 'integer', (cb) => cb.autoIncrement().primaryKey())
-      .addColumn('userId', 'uuid', (cb) => cb.notNull())
+      .addColumn('userId', 'text', (cb) => cb.notNull())
       .addColumn('foodItemId', 'integer')
       .addColumn('mealId', 'integer')
       .addColumn('quantityInGrams', 'integer')

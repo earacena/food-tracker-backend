@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 export const zProfile = z.object({
-  userId: z.string().uuid(),
+  userId: z.string(),
   dailyCalorieGoal: z.number(),
   createdAt: z.coerce.date()
 })
@@ -9,7 +9,7 @@ export const zProfile = z.object({
 export const zProfiles = z.array(zProfile)
 
 export const zProfileDetails = z.object({
-  userId: z.string().uuid(),
+  userId: z.string(),
   dailyCalorieGoal: z.number()
 })
 

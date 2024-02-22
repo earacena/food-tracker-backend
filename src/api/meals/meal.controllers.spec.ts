@@ -19,7 +19,7 @@ describe('Meal API', () => {
   beforeAll(async () => {
     await db.schema.createTable('meal')
       .addColumn('id', 'integer', (cb) => cb.autoIncrement().primaryKey())
-      .addColumn('userId', 'integer', (cb) => cb.notNull())
+      .addColumn('userId', 'text', (cb) => cb.notNull())
       .addColumn('name', 'text', (cb) => cb.notNull())
       .addColumn('createdAt', 'timestamp', (cb) => cb.notNull().defaultTo(currentTimestamp))
       .execute()

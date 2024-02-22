@@ -13,7 +13,7 @@ describe('Activity Repository', () => {
     await db.schema
       .createTable('activity')
       .addColumn('id', 'integer', (cb) => cb.autoIncrement().primaryKey())
-      .addColumn('userId', 'uuid', (cb) => cb.notNull())
+      .addColumn('userId', 'text', (cb) => cb.notNull())
       .addColumn('mealId', 'integer')
       .addColumn('foodItemId', 'integer')
       .addColumn('quantityInGrams', 'integer')

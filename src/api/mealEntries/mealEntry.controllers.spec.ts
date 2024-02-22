@@ -19,7 +19,7 @@ describe('MealEntry API', () => {
     await db.schema
       .createTable('mealEntry')
       .addColumn('id', 'integer', (cb) => cb.autoIncrement().primaryKey())
-      .addColumn('userId', 'uuid', (cb) => cb.notNull())
+      .addColumn('userId', 'text', (cb) => cb.notNull())
       .addColumn('mealId', 'integer')
       .addColumn('foodItemId', 'integer')
       .addColumn('quantityInGrams', 'integer')

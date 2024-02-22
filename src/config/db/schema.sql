@@ -3,7 +3,7 @@ CREATE TYPE visibility AS ENUM ('private', 'public');
 CREATE TABLE "foodItem" (
   "id" INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   "foodName" TEXT NOT NULL,
-  "userId" uuid NOT NULL,
+  "userId" TEXT NOT NULL,
   "caloriesPerServing" INTEGER,
   "servingSizeInGrams" INTEGER,
   "servingSizeInUnits" INTEGER,
@@ -13,14 +13,14 @@ CREATE TABLE "foodItem" (
 
 CREATE TABLE "meal" (
   "id" INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  "userId" uuid NOT NULL,
+  "userId" TEXT NOT NULL,
   "name" TEXT NOT NULL,
   "createdAt" timestamptz DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE "mealEntry" (
   "id" INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  "userId" uuid NOT NULL,
+  "userId" TEXT NOT NULL,
   "mealId" INTEGER,
   "foodItemId" INTEGER,
   "quantityInGrams" INTEGER,
@@ -28,14 +28,14 @@ CREATE TABLE "mealEntry" (
 );
 
 CREATE TABLE "profile" (
-  "userId" uuid PRIMARY KEY,
+  "userId" TEXT PRIMARY KEY,
   "dailyCalorieGoal" INTEGER,
   "createdAt" timestamptz DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE "activity" (
   "id" INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  "userId" uuid,
+  "userId" TEXT,
   "mealId" INTEGER,
   "foodItemId" INTEGER,
   "quantityInGrams" INTEGER,

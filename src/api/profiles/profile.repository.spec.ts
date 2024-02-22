@@ -11,7 +11,7 @@ describe('Profile Repository', () => {
 
   beforeAll(async () => {
     await db.schema.createTable('profile')
-      .addColumn('userId', 'uuid', (cb) => cb.primaryKey())
+      .addColumn('userId', 'text', (cb) => cb.primaryKey())
       .addColumn('dailyCalorieGoal', 'integer')
       .addColumn('createdAt', 'timestamp', (cb) =>
         cb.notNull().defaultTo(currentTimestamp)

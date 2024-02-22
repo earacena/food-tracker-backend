@@ -12,7 +12,7 @@ describe('Meal Repository', () => {
     await db.schema.createTable('meal')
       .addColumn('id', 'integer', (cb) => cb.autoIncrement().primaryKey()) // Sqlite3 specific
       .addColumn('name', 'text', (cb) => cb.notNull())
-      .addColumn('userId', 'uuid', (cb) => cb.notNull())
+      .addColumn('userId', 'text', (cb) => cb.notNull())
       .addColumn('createdAt', 'timestamp', (cb) =>
         cb.notNull().defaultTo(currentTimestamp)
       )

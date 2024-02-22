@@ -20,7 +20,7 @@ describe('Profile API', () => {
 
   beforeAll(async () => {
     await db.schema.createTable('profile')
-      .addColumn('userId', 'uuid', (cb) => cb.notNull())
+      .addColumn('userId', 'text', (cb) => cb.notNull())
       .addColumn('dailyCalorieGoal', 'integer')
       .addColumn('createdAt', 'timestamp', (cb) => cb.notNull().defaultTo(currentTimestamp))
       .execute()

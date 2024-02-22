@@ -12,7 +12,7 @@ describe('MealEntry Repository', () => {
     await db.schema
       .createTable('mealEntry')
       .addColumn('id', 'integer', (cb) => cb.autoIncrement().primaryKey())
-      .addColumn('userId', 'uuid', (cb) => cb.notNull())
+      .addColumn('userId', 'text', (cb) => cb.notNull())
       .addColumn('mealId', 'integer', (cb) => cb.notNull())
       .addColumn('foodItemId', 'integer', (cb) => cb.notNull())
       .addColumn('quantityInGrams', 'integer')

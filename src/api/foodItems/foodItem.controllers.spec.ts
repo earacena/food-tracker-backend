@@ -20,7 +20,7 @@ describe('FoodItem API', () => {
     await db.schema.createTable('foodItem')
       .addColumn('id', 'integer', (cb) => cb.autoIncrement().primaryKey())
       .addColumn('foodName', 'text', (cb) => cb.notNull())
-      .addColumn('userId', 'uuid', (cb) => cb.notNull())
+      .addColumn('userId', 'text', (cb) => cb.notNull())
       .addColumn('caloriesPerServing', 'integer', (cb) => cb.notNull())
       .addColumn('servingSizeInGrams', 'integer')
       .addColumn('servingSizeInUnits', 'integer')

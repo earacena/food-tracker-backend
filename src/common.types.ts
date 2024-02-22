@@ -5,5 +5,5 @@ export const zIdParams = z.object({
 })
 
 export const zUserIdParams = z.object({
-  userId: z.string().uuid()
+  userId: z.string()
 })
