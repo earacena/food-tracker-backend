@@ -8,7 +8,14 @@ import authenticate from './middleware/authenticate'
 import profileRouter from './api/profiles/profile.routes'
 import activityRouter from './api/activities/activity.routes'
 import morgan from 'morgan'
+import { initializeApp } from 'firebase-admin/app'
 
+// Initialize Firebase
+if (NODE_ENV !== 'test') {
+  initializeApp()
+}
+
+// Initialize Express
 const expressApp = express()
 
 // Pre-route middleware

@@ -3,7 +3,6 @@ import { z } from 'zod'
 
 export const NODE_ENV = z.string().parse(process.env['NODE_ENV'])
 export const PORT = z.coerce.number().parse(process.env['PORT'])
-export const KEYCLOAK_PUBLIC_KEY = `-----BEGIN PUBLIC KEY-----\n${z.string().parse(process.env['KEYCLOAK_PUBLIC_KEY'])}\n-----END PUBLIC KEY-----`
 
 const zDatabaseCredentials = z.object({
   user: z.string(),

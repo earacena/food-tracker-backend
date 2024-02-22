@@ -1,8 +1,8 @@
 import { type NextFunction, type Request, type Response } from 'express'
-import { KEYCLOAK_PUBLIC_KEY } from '../config'
-import Jwt, { TokenExpiredError } from 'jsonwebtoken'
+import { TokenExpiredError } from 'jsonwebtoken'
 import AuthenticationError from '../utils/errors/AuthenticationError'
 import { z } from 'zod'
+import { type DecodedIdToken, getAuth } from 'firebase-admin/auth'
 
 function extractJwt (req: Request): string | null {
   const bearerResult = z.string().safeParse(req.headers['authentication'])
@@ -15,12 +15,15 @@ function extractJwt (req: Request): string | null {
   return token ?? null
 }
 
-function decodeJwt (token: string): string | Jwt.JwtPayload {
-  const decodedToken = Jwt.verify(token, KEYCLOAK_PUBLIC_KEY, {
-    algorithms: ['RS256']
-  })
-
-  return decodedToken
+async function decodeJwt (token: string): Promise<DecodedIdToken | null> {
+  // Decode token using firebase SDK
+  try {
+    const decoded = await getAuth().verifyIdToken(token)
+    return decoded
+  } catch (err: unknown) {
+    console.error(err)
+    return null
+  }
 }
 
 function authenticate (req: Request, _res: Response, next: NextFunction): void {
@@ -28,8 +31,13 @@ function authenticate (req: Request, _res: Response, next: NextFunction): void {
     const token = extractJwt(req)
     if (token != null) {
       const decodedToken = decodeJwt(token)
-      req.body.token = decodedToken
-      next()
+
+      if (decodedToken !== null) {
+        req.body.token = decodedToken
+        next()
+      } else {
+        next(new AuthenticationError('unable to verify token'))
+      }
     }
   } catch (err: unknown) {
     if (err instanceof TokenExpiredError) {
