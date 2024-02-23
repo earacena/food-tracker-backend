@@ -6,12 +6,15 @@ import { NotFoundError } from '../../utils/errors'
 
 describe('Profile Repository', () => {
   const currentTimestamp = new Date()
+  const name1 = randomUUID()
+  const name2 = randomUUID()
   const userId1 = randomUUID()
   const userId2 = randomUUID()
 
   beforeAll(async () => {
     await db.schema.createTable('profile')
       .addColumn('userId', 'text', (cb) => cb.primaryKey())
+      .addColumn('name', 'text', (cb) => cb.notNull())
       .addColumn('dailyCalorieGoal', 'integer')
       .addColumn('createdAt', 'timestamp', (cb) =>
         cb.notNull().defaultTo(currentTimestamp)
@@ -22,6 +25,7 @@ describe('Profile Repository', () => {
     await db.insertInto('profile')
       .values({
         userId: userId1,
+        name: name1,
         dailyCalorieGoal: 2300
       })
       .execute()
@@ -29,6 +33,7 @@ describe('Profile Repository', () => {
     await db.insertInto('profile')
       .values({
         userId: userId2,
+        name: name2,
         dailyCalorieGoal: 2000
       })
       .execute()
@@ -43,6 +48,7 @@ describe('Profile Repository', () => {
 
     expect(profile).toStrictEqual({
       userId: userId1,
+      name: name1,
       dailyCalorieGoal: 2300,
       createdAt: currentTimestamp
     })
@@ -62,6 +68,7 @@ describe('Profile Repository', () => {
 
     expect(updatedProfile).toStrictEqual({
       userId: userId2,
+      name: name2,
       dailyCalorieGoal: 2800,
       createdAt: currentTimestamp
     })
@@ -69,13 +76,16 @@ describe('Profile Repository', () => {
 
   test('should create a profile', async () => {
     const newUserId = crypto.randomUUID()
+    const newName = crypto.randomUUID()
     const newProfile = zProfile.parse(await ProfileRepository.createProfile({
       userId: newUserId,
+      name: newName,
       dailyCalorieGoal: 2200
     }))
 
     expect(newProfile).toStrictEqual({
       userId: newUserId,
+      name: newName,
       dailyCalorieGoal: 2200,
       createdAt: currentTimestamp
     })

@@ -14,6 +14,10 @@ jest.mock('../../middleware/authenticate.ts', () => jest.fn((req: Request, _res:
 describe('Profile API', () => {
   const currentTimestamp = new Date().toISOString()
 
+  const name1 = randomUUID()
+  const name2 = randomUUID()
+  const name3 = randomUUID()
+
   const userId1 = randomUUID()
   const userId2 = randomUUID()
   const userId3 = randomUUID()
@@ -21,6 +25,7 @@ describe('Profile API', () => {
   beforeAll(async () => {
     await db.schema.createTable('profile')
       .addColumn('userId', 'text', (cb) => cb.notNull())
+      .addColumn('name', 'text', (cb) => cb.notNull())
       .addColumn('dailyCalorieGoal', 'integer')
       .addColumn('createdAt', 'timestamp', (cb) => cb.notNull().defaultTo(currentTimestamp))
       .execute()
@@ -29,6 +34,7 @@ describe('Profile API', () => {
     await db.insertInto('profile')
       .values({
         userId: userId1,
+        name: name1,
         dailyCalorieGoal: 3000
       })
       .execute()
@@ -36,6 +42,7 @@ describe('Profile API', () => {
     await db.insertInto('profile')
       .values({
         userId: userId2,
+        name: name2,
         dailyCalorieGoal: 2000
       })
       .execute()
@@ -43,6 +50,7 @@ describe('Profile API', () => {
     await db.insertInto('profile')
       .values({
         userId: userId3,
+        name: name3,
         dailyCalorieGoal: 2500
       })
       .execute()
@@ -66,6 +74,7 @@ describe('Profile API', () => {
         data: {
           userProfile: {
             userId: userId3,
+            name: name3,
             dailyCalorieGoal: 2500,
             createdAt: currentTimestamp
           }
@@ -89,11 +98,13 @@ describe('Profile API', () => {
   describe('when creating profiles', () => {
     test('should create a profile and return it', async () => {
       const newUserId = randomUUID()
+      const newName = randomUUID()
 
       const response = await api
         .post('/api/profiles')
         .send({
           userId: newUserId,
+          name: newName,
           dailyCalorieGoal: 2200
         })
         .expect(201)
@@ -105,6 +116,7 @@ describe('Profile API', () => {
           newProfile: {
             userId: newUserId,
             dailyCalorieGoal: 2200,
+            name: newName,
             createdAt: currentTimestamp
           }
         }
@@ -127,6 +139,7 @@ describe('Profile API', () => {
         data: {
           updatedProfile: {
             userId: userId1,
+            name: name1,
             dailyCalorieGoal: 3200,
             createdAt: currentTimestamp
           }
