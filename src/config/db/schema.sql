@@ -29,13 +29,14 @@ CREATE TABLE "mealEntry" (
 
 CREATE TABLE "profile" (
   "userId" TEXT PRIMARY KEY,
+  "name" TEXT NOT NULL,
   "dailyCalorieGoal" INTEGER,
   "createdAt" timestamptz DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE "activity" (
   "id" INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  "userId" TEXT,
+  "userId" TEXT NOT NULL,
   "mealId" INTEGER,
   "foodItemId" INTEGER,
   "quantityInGrams" INTEGER,
