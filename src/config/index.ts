@@ -14,9 +14,9 @@ const zDatabaseCredentials = z.object({
 })
 
 export const databaseCredentials = zDatabaseCredentials.parse({
-  user: process.env['DATABASE_USER'],
-  pass: process.env['DATABASE_PASS'],
-  host: process.env['DATABASE_HOST'],
-  port: process.env['DATABASE_PORT'],
-  name: process.env['DATABASE_NAME']
+  user: NODE_ENV === 'prod' ? process.env['DATABASE_USER'] : process.env['DEV_DATABASE_USER'],
+  pass: NODE_ENV === 'prod' ? process.env['DATABASE_PASS'] : process.env['DEV_DATABASE_PASS'],
+  host: NODE_ENV === 'prod' ? process.env['DATABASE_HOST'] : process.env['DEV_DATABASE_HOST'],
+  port: NODE_ENV === 'prod' ? process.env['DATABASE_PORT'] : process.env['DEV_DATABASE_PORT'],
+  name: NODE_ENV === 'prod' ? process.env['DATABASE_NAME'] : process.env['DEV_DATABASE_NAME']
 })
