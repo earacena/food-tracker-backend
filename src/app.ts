@@ -1,5 +1,5 @@
 import express, { type RequestHandler } from 'express'
-import { NODE_ENV, PORT } from './config'
+import { CORS_ORIGIN, NODE_ENV, PORT } from './config'
 import foodItemRouter from './api/foodItems/foodItem.routes'
 import errorHandler from './middleware/errorHandler.middleware'
 import mealRouter from './api/meals/meal.routes'
@@ -9,6 +9,7 @@ import profileRouter from './api/profiles/profile.routes'
 import activityRouter from './api/activities/activity.routes'
 import morgan from 'morgan'
 import { applicationDefault, initializeApp } from 'firebase-admin/app'
+import cors from 'cors'
 
 // Initialize Firebase
 if (NODE_ENV !== 'test') {
@@ -21,6 +22,9 @@ if (NODE_ENV !== 'test') {
 const expressApp = express()
 
 // Pre-route middleware
+expressApp.use(cors({
+  origin: CORS_ORIGIN
+}))
 expressApp.use(express.json())
 expressApp.use(express.urlencoded({ extended: true }))
 

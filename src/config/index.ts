@@ -3,6 +3,7 @@ import { z } from 'zod'
 
 export const NODE_ENV = z.string().parse(process.env['NODE_ENV'])
 export const PORT = z.coerce.number().parse(process.env['PORT'])
+export const CORS_ORIGIN = z.string().parse(process.env['CORS_ORIGIN'])
 
 const zDatabaseCredentials = z.object({
   user: z.string(),
