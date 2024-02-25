@@ -23,8 +23,11 @@ const expressApp = express()
 
 // Pre-route middleware
 expressApp.use(cors({
-  origin: CORS_ORIGIN
+  origin: CORS_ORIGIN,
+  methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'DELETE', 'HEAD'],
+  credentials: true
 }))
+
 expressApp.use(express.json())
 expressApp.use(express.urlencoded({ extended: true }))
 
